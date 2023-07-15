@@ -1,4 +1,3 @@
-# auth-app
-A simple auth app to experiment with nodejs/Typescript, ember and react.
+# auth-api
 
-
+An auth nodejs/Typescript api.
