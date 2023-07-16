@@ -29,12 +29,9 @@ userRouter.post("/signup", async (req: Request, res: Response) => {
 
   user = await userRepo.save(user);
 
-  const token = generateToken(user, 30);
+  const token = generateToken(user, '1h');
 
-  res.json({
-    user,
-    token
-  });
+  res.json({token});
 })
 
 userRouter.put("/:id", async (req: Request, res: Response) => {

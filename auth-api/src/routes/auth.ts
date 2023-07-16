@@ -21,12 +21,9 @@ authRouter.post('/login', async (req: Request, res: Response) => {
 
    const validatePassword = await bcrypt.compare(req.body.password, user.password);
 
-   const token = generateToken(user, 30);
+   const token = generateToken(user, '1h');
 
-   res.json({
-    validatePassword,
-    token
-   });
+   res.json({token});
 });
 
 authRouter.get('/', (req: Request, res: Response) => {
