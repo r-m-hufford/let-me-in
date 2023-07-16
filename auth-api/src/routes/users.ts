@@ -1,17 +1,11 @@
 import express, { Request, Response } from 'express';
 import { User } from '../models/user';
 import { myDataSource } from '../../app-data-source';
+import { generateToken } from '../utils/jwt';
 const userRepo = myDataSource.getRepository(User);
 
 export const userRouter = express.Router();
 
-userRouter.get("/", async (req: Request, res: Response) => {
-  const users = await userRepo.find();
-  res.send({
-    message: 'all the users',
-    users: users
-  });
-})
 
 userRouter.get("/:id", async (req: Request, res: Response) => {
   const user = await userRepo.findOne({ 
@@ -23,20 +17,24 @@ userRouter.get("/:id", async (req: Request, res: Response) => {
   res.send(user)
 })
 
-userRouter.post("/", async (req: Request, res: Response) => {
-  const { firstName, lastName, email, password, userCode } = req.body;
+userRouter.post("/signup", async (req: Request, res: Response) => {
+  const { firstName, lastName, email, password } = req.body;
 
-  const user = new User()
+  let user = new User()
 
   user.firstName = firstName;
   user.lastName = lastName;
-  user.userCode =userCode;
   user.email = email;
   user.password = password;
 
-  await userRepo.save(user);
+  user = await userRepo.save(user);
 
-  res.send(user);
+  const token = generateToken(user);
+
+  res.send({
+    user,
+    token
+  });
 })
 
 userRouter.put("/:id", async (req: Request, res: Response) => {

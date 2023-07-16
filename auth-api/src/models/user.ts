@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, Unique } from 'typeorm';
 import bcrypt from 'bcrypt';
-import { UUID } from 'crypto';
 
 @Entity("users")
+@Unique(['email'])
 export class User {
   @PrimaryGeneratedColumn()
   userId: number;
@@ -30,7 +30,6 @@ export class User {
 
   @BeforeInsert()
   async prepForInsert() {
-    console.log('we are in the user before insert!', this);
     this.password = await this.hashPassword(this.password);
   }
 
