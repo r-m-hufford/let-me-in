@@ -20,7 +20,7 @@ app.get('/api', (req: Request, res: Response) => {
   res.send('Express and Typescript Server. hot diggity.');
 });
 
-routes(app); 
+routes(app);
 
 app.listen(process.env.PORT, () => {
   console.log(`listening on ${process.env.PORT}`)
