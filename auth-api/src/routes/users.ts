@@ -24,15 +24,18 @@ userRouter.get("/:id", async (req: Request, res: Response) => {
 })
 
 userRouter.post("/", async (req: Request, res: Response) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, userCode } = req.body;
   const hashedPassword = await User.hashPassword(password);
 
-  const user = await userRepo.save({
-    firstName: firstName,
-    lastName: lastName,
-    email: email,
-    password: hashedPassword
-  });
+  const user = new User()
+
+  user.firstName = firstName;
+  user.lastName = lastName;
+  user.userCode =userCode;
+  user.email = email;
+  user.password = hashedPassword;
+
+  await userRepo.save(user);
 
   res.send(user);
 })

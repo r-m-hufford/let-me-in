@@ -22,6 +22,6 @@ app.get('/api', (req: Request, res: Response) => {
 
 routes(app); 
 
-app.listen(3000, () => {
-  console.log('listening on 3000')
+app.listen(process.env.PORT, () => {
+  console.log(`listening on ${process.env.PORT}`)
 });

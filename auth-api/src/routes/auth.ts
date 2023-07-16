@@ -1,7 +1,9 @@
+import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { myDataSource } from '../../app-data-source';
 import { User } from '../models/user';
+
 const jwt = require('jsonwebtoken');
 const userRepo = myDataSource.getRepository(User);
 
