@@ -20,7 +20,7 @@ authRouter.post('/', async (req: Request, res: Response) => {
 
    const validatePassword = await bcrypt.compare(req.body.password, user.password);
 
-   const token = jwt.sign({ email: user.email, id: user.userId }, 'sillyPrivateKey');
+   const token = jwt.sign({ email: user.email, id: user.userId }, process.env.JWT_PRIVATE_KEY);
 
    res.send({
     validatePassword,

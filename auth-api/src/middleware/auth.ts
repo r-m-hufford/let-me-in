@@ -7,7 +7,7 @@ export function auth(req, res, next) {
 
   if (!token) console.log('woah!!! we got no token here!');
 
-  const decoded = jwt.verify(token, 'sillyPrivateKey');
+  const decoded = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
   req.userEmail = decoded.email;
   
   next();
