@@ -22,9 +22,9 @@ authRouter.post('/login', async (req: Request, res: Response) => {
     const validatePassword = await bcrypt.compare(req.body.password, user.password);
     if (!validatePassword) res.status(400).json({ error: 'Invalid email or password' })
  
-    const token = generateToken(user, '1h');
+    const token = generateToken(user, 30);
  
-    res.status(200).json({token});
+    res.status(200).json(token);
    } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'internal server error' });
