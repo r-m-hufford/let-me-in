@@ -5,8 +5,7 @@ export function auth(req, res, next) {
   console.log('auth middleware');
 
   const { url, method } = req;
-  if (method === 'POST' && (url === '/api/users/signup' || url === '/api/auth/login')) {
-    console.log('this is a sign up let them through');
+  if (userIsSigningUpOrLoggingIn(url, method)) {
     return next();
   }
 
@@ -21,4 +20,8 @@ export function auth(req, res, next) {
   } catch (error) {
     return res.status(401).json({ error: 'Invalid Token' });
   }
+}
+
+function userIsSigningUpOrLoggingIn(url: string, method: string) {
+  return method === 'POST' && (url === '/api/users/signup' || url === '/api/auth/login');
 }

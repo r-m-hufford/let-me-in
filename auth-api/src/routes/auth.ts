@@ -21,7 +21,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
 
    const validatePassword = await bcrypt.compare(req.body.password, user.password);
 
-   const token = generateToken(user);
+   const token = generateToken(user, 30);
 
    res.json({
     validatePassword,
