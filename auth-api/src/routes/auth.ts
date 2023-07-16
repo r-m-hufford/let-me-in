@@ -1,31 +1,32 @@
+import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import { generateToken } from '../utils/jwt';
 import { myDataSource } from '../../app-data-source';
 import { User } from '../models/user';
+
 const jwt = require('jsonwebtoken');
 const userRepo = myDataSource.getRepository(User);
 
 export const authRouter = express.Router();
 
-authRouter.post('/', async (req: Request, res: Response) => {
-  console.log('in the auth route');
-
-    const user = await userRepo.findOne({ 
-    where: {
-      email: req.body.email
-    }
-   });
-
-   const validatePassword = await bcrypt.compare(req.body.password, user.password);
-
-   const token = jwt.sign({ email: user.email, id: user.userId }, 'sillyPrivateKey');
-
-   res.send({
-    validatePassword,
-    token
-   });
-});
-
-authRouter.get('/', (req: Request, res: Response) => {
-  res.send('this is the auth route. hot diggity.');
+authRouter.post('/login', async (req: Request, res: Response) => {
+  try {
+     const user = await userRepo.findOne({ 
+     where: {
+       email: req.body.email
+     }
+    });
+    if (!user) res.status(400).json({ error: 'Invalid email or password' })
+ 
+    const validatePassword = await bcrypt.compare(req.body.password, user.password);
+    if (!validatePassword) res.status(400).json({ error: 'Invalid email or password' })
+ 
+    const token = generateToken(user, '1h');
+ 
+    res.status(200).json({token});
+   } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'internal server error' });
+   }
 });

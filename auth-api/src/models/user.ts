@@ -1,10 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, Unique } from 'typeorm';
 import bcrypt from 'bcrypt';
 
 @Entity("users")
+@Unique(['email'])
 export class User {
   @PrimaryGeneratedColumn()
   userId: number;
+
+  @Column('uuid', { default: () => 'uuid_generate_v4()' })
+  userCode: string;
 
   @Column()
   firstName: string;
@@ -18,8 +22,18 @@ export class User {
   @Column()
   password: string;
 
-  // comment for github testing
-  static async hashPassword(password) {
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  modifiedAt: Date;
+
+  @BeforeInsert()
+  async prepForInsert() {
+    this.password = await this.hashPassword(this.password);
+  }
+
+  async hashPassword(password) {
     const salt = await bcrypt.genSalt(10);
     return await bcrypt.hash(password, salt);
   }
