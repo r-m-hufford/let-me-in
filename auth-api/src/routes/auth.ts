@@ -23,12 +23,12 @@ authRouter.post('/login', async (req: Request, res: Response) => {
 
    const token = generateToken(user);
 
-   res.send({
+   res.json({
     validatePassword,
     token
    });
 });
 
 authRouter.get('/', (req: Request, res: Response) => {
-  res.send('this is the auth route. hot diggity.');
+  res.json('this is the auth route. hot diggity.');
 });

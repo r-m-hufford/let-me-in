@@ -14,7 +14,7 @@ userRouter.get("/:id", async (req: Request, res: Response) => {
     }
    });
 
-  res.send(user)
+  res.json(user)
 })
 
 userRouter.post("/signup", async (req: Request, res: Response) => {
@@ -31,7 +31,7 @@ userRouter.post("/signup", async (req: Request, res: Response) => {
 
   const token = generateToken(user);
 
-  res.send({
+  res.json({
     user,
     token
   });
@@ -39,10 +39,10 @@ userRouter.post("/signup", async (req: Request, res: Response) => {
 
 userRouter.put("/:id", async (req: Request, res: Response) => {
   const user = await userRepo.update(req.params.id, req.body);
-  res.send(user);
+  res.json(user);
 })
 
 userRouter.delete("/:id", async (req: Request, res: Response) => {
   const user = await userRepo.delete(req.params.id);
-  res.send(user);
+  res.json(user);
 })
