@@ -38,9 +38,9 @@ userRouter.post("/signup", async (req: Request, res: Response) => {
   
     user = await userRepo.save(user);
   
-    const token = generateToken(user, '1h');
+    const token = generateToken(user, 30, 60);
   
-    res.status(201).json({token});
+    res.status(201).json(token);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'internal server error' });
