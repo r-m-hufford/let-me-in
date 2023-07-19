@@ -1,7 +1,6 @@
-import { version } from "punycode";
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Unique, Column, BeforeInsert } from "typeorm";
 
-@Entity()
+@Entity("revoked_tokens")
 @Unique(['token'])
 export class RevokedTokens {
   @PrimaryGeneratedColumn()
@@ -24,6 +23,6 @@ export class RevokedTokens {
 
   @BeforeInsert()
   prepForInsert() {
-    // convert iat and expires at to dates
+    // convert iat and expires at to dates 
   }
 }
