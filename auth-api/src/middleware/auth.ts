@@ -29,7 +29,7 @@ export function auth(req, res, next) {
         // verify the refresh token
         const refreshData = verifyToken(refreshToken);
         // create the new tokens
-        token = generateToken({ email: refreshData.email, userCode: refreshData.userCode } as User, 30, 60);
+        token = generateToken({ email: refreshData.email, userCode: refreshData.userCode } as User);
         // res.header(token);
         return next();
       } catch (error) {
