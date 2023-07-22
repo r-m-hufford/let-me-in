@@ -21,14 +21,7 @@ export async function auth(req, res, next) {
     return res.status(401).json({ error: 'Unauthorized' });
   };
 
-  //check for revoked token
-  const revokedTokens = await revokedTokenRepo.find();
-  console.log('revoked tokens: ', revokedTokens);
-  for (let revokedToken of revokedTokens) {
-    console.log('revokedToken.token: ', revokedToken.token);
-    // if (token === revokedToken.token) console.log('we gotta maaaaaaatch!!');
-    if (token === revokedToken.token) res.status(401).json({ error: 'Invalid Token' });
-  };
+  if (await checkForRevokedTokens(token)) return res.status(401).json({ error: 'Invalid Token' });
 
   try {
     verifyToken(token);
@@ -55,8 +48,12 @@ export async function auth(req, res, next) {
   }
 }
 
-async function checkForRevokedTokens(): Promise<boolean> {
-  return 
+async function checkForRevokedTokens(token): Promise<boolean> {
+  const revokedTokens = await revokedTokenRepo.find();
+  for (let revokedToken of revokedTokens) {
+    if (token === revokedToken.token) return true
+  };
+  return false;
 }
 
 function userIsSigningUpOrLoggingIn(url: string, method: string): boolean {

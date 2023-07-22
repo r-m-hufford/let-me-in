@@ -23,6 +23,6 @@ export class RevokedTokens {
 
   @BeforeInsert()
   prepForInsert() {
-    // convert iat and expires at to dates 
+    // convert iat and expires at to dates maybe
   }
 }
