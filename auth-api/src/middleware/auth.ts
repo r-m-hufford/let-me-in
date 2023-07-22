@@ -1,10 +1,14 @@
 import { TokenExpiredError } from "jsonwebtoken";
 import { generateToken } from "../utils/jwt";
 import { User } from "../models/user";
+import { myDataSource } from "../../app-data-source";
+import { RevokedTokens } from "../models/revoked-token";
+const revokedTokenRepo = myDataSource.getRepository(RevokedTokens);
+
 
 const jwt = require('jsonwebtoken');
 
-export function auth(req, res, next) {
+export async function auth(req, res, next) {
   console.log('auth middleware');
 
   const { url, method } = req;
@@ -15,6 +19,15 @@ export function auth(req, res, next) {
   let token = req.header('x-auth-token');
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized' });
+  };
+
+  //check for revoked token
+  const revokedTokens = await revokedTokenRepo.find();
+  console.log('revoked tokens: ', revokedTokens);
+  for (let revokedToken of revokedTokens) {
+    console.log('revokedToken.token: ', revokedToken.token);
+    // if (token === revokedToken.token) console.log('we gotta maaaaaaatch!!');
+    if (token === revokedToken.token) res.status(401).json({ error: 'Invalid Token' });
   };
 
   try {
@@ -42,7 +55,11 @@ export function auth(req, res, next) {
   }
 }
 
-function userIsSigningUpOrLoggingIn(url: string, method: string) {
+async function checkForRevokedTokens(): Promise<boolean> {
+  return 
+}
+
+function userIsSigningUpOrLoggingIn(url: string, method: string): boolean {
   return method === 'POST' && (url === '/api/users/signup' || url === '/api/auth/login');
 }
 
