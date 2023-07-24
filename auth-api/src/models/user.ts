@@ -30,7 +30,7 @@ export class User {
 
   @BeforeInsert()
   async prepForInsert() {
-    this.password = await this.hashPassword(this.password);
+    this.password = await this.hashPassword(`${this.password}${process.env.AUTH_PEPPER}`);
   }
 
   async hashPassword(password) {
