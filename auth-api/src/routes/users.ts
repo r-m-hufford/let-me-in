@@ -38,7 +38,7 @@ userRouter.post("/signup", async (req: Request, res: Response) => {
   
     user = await userRepo.save(user);
   
-    const token = generateToken(user, 30, 60);
+    const token = generateToken(user);
   
     res.status(201).json(token);
   } catch (error) {

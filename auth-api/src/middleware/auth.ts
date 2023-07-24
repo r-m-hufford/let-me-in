@@ -1,10 +1,14 @@
 import { TokenExpiredError } from "jsonwebtoken";
 import { generateToken } from "../utils/jwt";
 import { User } from "../models/user";
+import { myDataSource } from "../../app-data-source";
+import { RevokedTokens } from "../models/revoked-token";
+const revokedTokenRepo = myDataSource.getRepository(RevokedTokens);
+
 
 const jwt = require('jsonwebtoken');
 
-export function auth(req, res, next) {
+export async function auth(req, res, next) {
   console.log('auth middleware');
 
   const { url, method } = req;
@@ -16,6 +20,8 @@ export function auth(req, res, next) {
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized' });
   };
+
+  if (await checkForRevokedTokens(token)) return res.status(401).json({ error: 'Invalid Token' });
 
   try {
     verifyToken(token);
@@ -29,7 +35,7 @@ export function auth(req, res, next) {
         // verify the refresh token
         const refreshData = verifyToken(refreshToken);
         // create the new tokens
-        token = generateToken({ email: refreshData.email, userCode: refreshData.userCode } as User, 30, 60);
+        token = generateToken({ email: refreshData.email, userCode: refreshData.userCode } as User);
         // res.header(token);
         return next();
       } catch (error) {
@@ -42,7 +48,15 @@ export function auth(req, res, next) {
   }
 }
 
-function userIsSigningUpOrLoggingIn(url: string, method: string) {
+async function checkForRevokedTokens(token): Promise<boolean> {
+  const revokedTokens = await revokedTokenRepo.find();
+  for (let revokedToken of revokedTokens) {
+    if (token === revokedToken.token) return true
+  };
+  return false;
+}
+
+function userIsSigningUpOrLoggingIn(url: string, method: string): boolean {
   return method === 'POST' && (url === '/api/users/signup' || url === '/api/auth/login');
 }
 
