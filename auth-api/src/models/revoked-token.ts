@@ -20,9 +20,4 @@ export class RevokedTokens {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @BeforeInsert()
-  prepForInsert() {
-    // convert iat and expires at to dates maybe
-  }
 }
