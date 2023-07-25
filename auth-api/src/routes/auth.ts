@@ -19,7 +19,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
     });
     if (!user) res.status(400).json({ error: 'Invalid email or password' })
  
-    const validatePassword = await bcrypt.compare(req.body.password, user.password);
+    const validatePassword = await bcrypt.compare(`${req.body.password}${process.env.AUTH_PEPPER}`, user.password);
     if (!validatePassword) res.status(400).json({ error: 'Invalid email or password' })
  
     const token = generateToken(user);
