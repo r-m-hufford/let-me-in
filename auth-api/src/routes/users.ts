@@ -27,8 +27,9 @@ userRouter.get("/:id", async (req: Request, res: Response) => {
 
 userRouter.post("/signup", async (req: Request, res: Response) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, confirmPassword } = req.body;
   
+    if (password !== confirmPassword) return res.status(401).json({ error: 'passwords do not match' })
     let user = new User()
   
     user.firstName = firstName;
