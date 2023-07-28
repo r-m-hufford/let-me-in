@@ -8,7 +8,9 @@ export const myDataSource = new DataSource({
     type: "postgres",
     url: 'postgresql://ryanmhufford@localhost:6543/auth_app',
     entities: [User, RevokedTokens],
+    migrations: ['./src/migration'],
+    migrationsTableName: 'migrations',
     logging: true,
-    synchronize: true,
+    synchronize: false,
     namingStrategy: new SnakeNamingStrategy()
 })
