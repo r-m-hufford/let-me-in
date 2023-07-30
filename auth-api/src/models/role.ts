@@ -28,4 +28,16 @@ export class Role {
   users: User[];
 
   @ManyToMany(() => Permissions)
+  @JoinTable({
+    name: "role_permission",
+    joinColumn: {
+      name: 'role_id',
+      referencedColumnName: 'role_id'
+    },
+    inverseJoinColumn: {
+      name: 'permission_id',
+      referencedColumnName: 'permission_id'
+    }
+  })
+  permissions: Permissions[];
 }
