@@ -12,7 +12,8 @@ userRouter.get("/:id", async (req: Request, res: Response) => {
     const user = await userRepo.findOne({ 
       where: {
         userId: parseInt(req.params.id)
-      }
+      },
+      relations: ['roles', 'roles.permissions']
      });
   
     if (!user) res.status(404).json({ message: 'user not found' });
