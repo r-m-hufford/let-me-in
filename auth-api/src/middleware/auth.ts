@@ -25,6 +25,7 @@ export async function auth(req, res, next) {
 
   try {
     verifyToken(token);
+    req.body.user_code = setReqUserCode(token);
     next();
   } catch (error) {
     if (error instanceof TokenExpiredError) {
@@ -36,6 +37,7 @@ export async function auth(req, res, next) {
         const refreshData = verifyToken(refreshToken);
         // create the new tokens
         token = generateToken({ email: refreshData.email, userCode: refreshData.userCode } as User);
+        req.body.userCode = setReqUserCode(token);
         // res.header(token);
         return next();
       } catch (error) {
@@ -62,4 +64,10 @@ function userIsSigningUpOrLoggingIn(url: string, method: string): boolean {
 
 function verifyToken(token: string) {
   return jwt.verify(token, process.env.JWT_PRIVATE_KEY);
+}
+
+function setReqUserCode(token: string) {
+  const decoded = jwt.decode(token);
+  console.log("decoded: ", decoded.user_code)
+  return decoded.user_code;
 }
