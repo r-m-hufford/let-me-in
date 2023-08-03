@@ -19,5 +19,5 @@ export class RevokedTokens {
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  modifiedAt: Date;
 }

@@ -11,13 +11,13 @@ import { User } from "../models/user";
  */
 export function generateToken(user: User, expiresIn: number | string = '1d', refreshIn: number | string = '5d') {
   const accessToken = jwt.sign(
-    { email: user.email, user_code: user.userCode, type: 'ACCESS' }, 
+    { email: user.email, userCode: user.userCode, type: 'ACCESS' }, 
     process.env.JWT_PRIVATE_KEY, 
     { expiresIn: expiresIn }
   );
 
   const refreshToken = jwt.sign(
-    { email: user.email, user_code: user.userCode, type: 'REFRESH' }, 
+    { email: user.email, userCode: user.userCode, type: 'REFRESH' }, 
     process.env.JWT_PRIVATE_KEY, 
     { expiresIn: refreshIn }
   );

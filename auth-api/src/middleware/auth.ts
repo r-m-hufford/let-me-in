@@ -25,7 +25,7 @@ export async function auth(req, res, next) {
 
   try {
     verifyToken(token);
-    req.body.user_code = setReqUserCode(token);
+    req.body.userCode = setReqUserCode(token);
     next();
   } catch (error) {
     if (error instanceof TokenExpiredError) {
@@ -68,6 +68,5 @@ function verifyToken(token: string) {
 
 function setReqUserCode(token: string) {
   const decoded = jwt.decode(token);
-  console.log("decoded: ", decoded.user_code)
-  return decoded.user_code;
+  return decoded.userCode;
 }

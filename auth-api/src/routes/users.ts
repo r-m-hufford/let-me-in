@@ -6,7 +6,7 @@ const userRepo = myDataSource.getRepository(User);
 
 export const userRouter = express.Router();
 
-
+// leaving for now might use for getting other accounts
 // userRouter.get("/:id", async (req: Request, res: Response) => {
 //   try {
 //     const user = await userRepo.findOne({ 
@@ -27,11 +27,10 @@ export const userRouter = express.Router();
 // })
 
 userRouter.get("/whoami", async (req: Request, res: Response) => {
-  // put the user code in a header and read from there. 
     try {
     const user = await userRepo.findOne({ 
       where: {
-        userCode: req.body.user_code
+        userCode: req.body.userCode
       },
       relations: ['roles', 'roles.permissions']
      });
