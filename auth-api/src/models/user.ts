@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, Unique, ManyToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, Unique, ManyToMany, BeforeUpdate } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { Role } from './role';
 
@@ -23,6 +23,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ type: 'boolean', default: false })
+  isBlocked: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -42,6 +45,11 @@ export class User {
   @BeforeInsert()
   async prepForInsert() {
     this.password = await this.hashPassword(`${this.password}${process.env.AUTH_PEPPER}`);
+  }
+
+  @BeforeUpdate()
+  async prepForUpdate() {
+    // if isBlocked = true invalidate token
   }
 
   async hashPassword(password) {

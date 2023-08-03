@@ -2,8 +2,8 @@ import { TokenExpiredError } from "jsonwebtoken";
 import { generateToken } from "../utils/jwt";
 import { User } from "../models/user";
 import { myDataSource } from "../../app-data-source";
-import { RevokedTokens } from "../models/revoked-token";
-const revokedTokenRepo = myDataSource.getRepository(RevokedTokens);
+import { RevokedToken } from "../models/revoked-token";
+const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
 
 
 const jwt = require('jsonwebtoken');
@@ -21,7 +21,7 @@ export async function auth(req, res, next) {
     return res.status(401).json({ error: 'Unauthorized' });
   };
 
-  if (await checkForRevokedTokens(token)) return res.status(401).json({ error: 'Invalid Token' });
+  if (await checkForRevokedToken(token)) return res.status(401).json({ error: 'Invalid Token' });
 
   try {
     verifyToken(token);
@@ -50,7 +50,7 @@ export async function auth(req, res, next) {
   }
 }
 
-async function checkForRevokedTokens(token): Promise<boolean> {
+async function checkForRevokedToken(token): Promise<boolean> {
   const revokedTokens = await revokedTokenRepo.find();
   for (let revokedToken of revokedTokens) {
     if (token === revokedToken.token) return true

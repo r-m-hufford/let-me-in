@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Uni
 
 @Entity("revoked_tokens")
 @Unique(['token'])
-export class RevokedTokens {
+export class RevokedToken {
   @PrimaryGeneratedColumn()
   revokedTokenId: number;
 
