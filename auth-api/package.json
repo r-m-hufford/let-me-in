@@ -9,10 +9,7 @@
     "start": "nodemon src/index.ts",
     "predevelop": "npm run build",
     "develop": "npx tsc -w & nodemon dist/src/index.js",
-    "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run -d ./app-data-source.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
-    "migration:create": "npm run typeorm migration:create"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
