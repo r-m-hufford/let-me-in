@@ -14,13 +14,13 @@ const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
  */
 export function generateToken(user: User, expiresIn: number | string = '1d', refreshIn: number | string = '5d') {
   const accessToken = jwt.sign(
-    { email: user.email, userCode: user.userCode, isBlocked: user.isBlocked, type: 'ACCESS' }, 
+    { email: user.email, userCode: user.userCode, type: 'ACCESS' }, 
     process.env.JWT_PRIVATE_KEY, 
     { expiresIn: expiresIn }
   );
 
   const refreshToken = jwt.sign(
-    { email: user.email, userCode: user.userCode, isBlocked: user.isBlocked, type: 'REFRESH' }, 
+    { email: user.email, userCode: user.userCode, type: 'REFRESH' }, 
     process.env.JWT_PRIVATE_KEY, 
     { expiresIn: refreshIn }
   );

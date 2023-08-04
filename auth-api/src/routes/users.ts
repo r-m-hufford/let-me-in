@@ -36,6 +36,10 @@ userRouter.get("/whoami", async (req: Request, res: Response) => {
      });
   
     if (!user) res.status(404).json({ message: 'user not found' });
+
+    // do not return these properties
+    delete user.password;
+    delete user.userId;
     
     res.status(200).json(user);
     
