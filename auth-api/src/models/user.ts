@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, Unique } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, Unique, ManyToMany, BeforeUpdate } from 'typeorm';
 import bcrypt from 'bcrypt';
+import { Role } from './role';
 
 @Entity("users")
 @Unique(['email'])
@@ -27,6 +28,16 @@ export class User {
 
   @UpdateDateColumn()
   modifiedAt: Date;
+
+  /**
+   * relationships
+   */
+
+  @ManyToMany(
+    () => Role,
+    role => role.users
+  )
+  roles: Role[];
 
   @BeforeInsert()
   async prepForInsert() {

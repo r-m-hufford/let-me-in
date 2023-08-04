@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
+import { RevokedToken } from "../models/revoked-token";
 import { User } from "../models/user";
+import { myDataSource } from '../../app-data-source';
+const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
 
 /**
  * 
@@ -11,13 +14,13 @@ import { User } from "../models/user";
  */
 export function generateToken(user: User, expiresIn: number | string = '1d', refreshIn: number | string = '5d') {
   const accessToken = jwt.sign(
-    { email: user.email, id: user.userCode, type: 'ACCESS' }, 
+    { email: user.email, userCode: user.userCode, type: 'ACCESS' }, 
     process.env.JWT_PRIVATE_KEY, 
     { expiresIn: expiresIn }
   );
 
   const refreshToken = jwt.sign(
-    { email: user.email, id: user.userCode, type: 'REFRESH' }, 
+    { email: user.email, userCode: user.userCode, type: 'REFRESH' }, 
     process.env.JWT_PRIVATE_KEY, 
     { expiresIn: refreshIn }
   );
@@ -26,4 +29,16 @@ export function generateToken(user: User, expiresIn: number | string = '1d', ref
     accessToken,
     refreshToken
   };
+}
+
+export async function invalidateToken(token) {
+  const decoded = jwt.decode(token);
+
+  let revokedToken = new RevokedToken();
+
+  revokedToken.token = token;
+  revokedToken.iat = new Date(decoded.iat * 1000);
+  revokedToken.expiresAt = new Date(decoded.exp * 1000);
+
+  revokedToken = await revokedTokenRepo.save(revokedToken)
 }
