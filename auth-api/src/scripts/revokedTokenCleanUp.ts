@@ -22,6 +22,6 @@ const userRepo = myDataSource.getRepository(User);
   console.log(myDataSource.isInitialized);
   const revoked = await revokedTokenRepo.find();
 
-  console.log({ revoked })
+  console.log({ revoked });
 })();
 
