@@ -20,8 +20,23 @@ const userRepo = myDataSource.getRepository(User);
   });
 
   console.log(myDataSource.isInitialized);
-  const revoked = await revokedTokenRepo.find();
+  const revokedTokens = await revokedTokenRepo.find();
 
-  console.log({ revoked });
+  for ( let revokedToken of revokedTokens ) {
+    if (revokedToken.expiresAt < new Date) {
+      console.log(revokedToken.expiresAt);
+      await revokedTokenRepo.delete(revokedToken.revokedTokenId);
+    }
+  }
+
+  await myDataSource
+  .destroy()
+  .then(() => {
+    console.log('database connection closed')
+  })
+  .catch((err => {
+    console.log('error closing database connection')
+  }));
+  console.log('finialize revoked token table clean up');
 })();
 
