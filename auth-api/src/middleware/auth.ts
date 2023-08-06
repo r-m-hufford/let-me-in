@@ -52,11 +52,20 @@ export async function auth(req, res, next) {
 
 async function checkForRevokedToken(token): Promise<boolean> {
   const revokedTokens = await revokedTokenRepo.find();
+
   for (let revokedToken of revokedTokens) {
     if (token === revokedToken.token) return true
   };
   return false;
 }
+
+// refactor check for revoked tokens
+// fetch tokens - this can get put in a token service
+
+// check if a token is included
+
+// put the steps together
+
 
 function userIsSigningUpOrLoggingIn(url: string, method: string): boolean {
   return method === 'POST' && (url === '/api/users/signup' || url === '/api/auth/login');
