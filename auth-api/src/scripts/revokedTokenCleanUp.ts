@@ -19,7 +19,6 @@ const userRepo = myDataSource.getRepository(User);
     console.error('error initializing data source:', err);
   });
 
-  console.log(myDataSource.isInitialized);
   const revokedTokens = await revokedTokenRepo.find();
 
   for ( let revokedToken of revokedTokens ) {
