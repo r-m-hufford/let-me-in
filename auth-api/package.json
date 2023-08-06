@@ -9,6 +9,7 @@
     "start": "nodemon src/index.ts",
     "predevelop": "npm run build",
     "develop": "npx tsc -w & nodemon dist/src/index.js",
+    "token:cleanup": "ts-node src/scripts/revokedTokenCleanup.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
