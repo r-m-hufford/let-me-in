@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { User } from '../models/user';
 import { myDataSource } from '../../app-data-source';
 import { generateToken } from '../utils/jwt';
+import { whoami } from '../services/users';
 const userRepo = myDataSource.getRepository(User);
 
 export const userRouter = express.Router();
@@ -28,26 +29,14 @@ export const userRouter = express.Router();
 
 userRouter.get("/whoami", async (req: Request, res: Response) => {
     try {
-    const user = await userRepo.findOne({ 
-      where: {
-        userCode: req.body.userCode
-      },
-      relations: ['roles', 'roles.permissions']
-     });
-  
-    if (!user) res.status(404).json({ message: 'user not found' });
-
-    // do not return these properties
-    delete user.password;
-    delete user.userId;
-    
-    res.status(200).json(user);
-    
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'internal server error' });
+      const user = await whoami(req.body);
+      if (!user) res.status(404).json({ message: 'user not found' });
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json({ error: 'internal server error' });
+    }
   }
-})
+)
 
 userRouter.post("/signup", async (req: Request, res: Response) => {
   try {
