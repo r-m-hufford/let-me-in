@@ -3,6 +3,8 @@ import { User } from '../models/user';
 import { myDataSource } from '../../app-data-source';
 import { generateToken } from '../utils/jwt';
 import { signup, update, whoami } from '../services/users';
+import { confirmNewPassword } from '../services/password';
+
 const userRepo = myDataSource.getRepository(User);
 
 export const userRouter = express.Router();
@@ -40,8 +42,7 @@ userRouter.get("/whoami", async (req: Request, res: Response) => {
 
 userRouter.post("/signup", async (req: Request, res: Response) => {
   try {
-    const { password, confirmPassword } = req.body;
-    if (password !== confirmPassword) return res.status(401).json({ error: 'passwords do not match' })
+    if (confirmNewPassword(req.body)) return res.status(401).json({ error: 'passwords do not match' })
   
     const user = await signup(req.body);
     const token = generateToken(user);

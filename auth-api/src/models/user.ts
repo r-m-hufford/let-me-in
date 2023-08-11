@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, Unique, ManyToMany, BeforeUpdate } from 'typeorm';
-import bcrypt from 'bcrypt';
 import { Role } from './role';
+import { hashPassword } from '../services/password';
 
 @Entity("users")
 @Unique(['email'])
@@ -41,11 +41,7 @@ export class User {
 
   @BeforeInsert()
   async prepForInsert() {
-    this.password = await this.hashPassword(`${this.password}${process.env.AUTH_PEPPER}`);
+    this.password = await hashPassword(this.password);
   }
 
-  async hashPassword(password) {
-    const salt = await bcrypt.genSalt(10);
-    return await bcrypt.hash(password, salt);
-  }
 }
