@@ -3,7 +3,7 @@ import { User } from "../models/user";
 import { generateToken } from "../utils/jwt";
 const userRepo = myDataSource.getRepository(User);
 
-export async function whoami(reqBody) {
+export async function whoami(reqBody): Promise<User> {
   try {
     let user = await userRepo.findOne({ 
       where: {
@@ -14,10 +14,23 @@ export async function whoami(reqBody) {
      user = sanitizeUserResponse(user);
      return user;
   } catch (error) {
+    console.error(error)
   }
 }
 
-export async function signup(reqBody) {
+export async function getByEmail(reqBody): Promise<User> {
+  try {
+    return await userRepo.findOne({ 
+       where: {
+         email: reqBody.email
+       }
+      });
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function signup(reqBody): Promise<User> {
   try {
     const { firstName, lastName, email, password } = reqBody;
     let user = new User()
