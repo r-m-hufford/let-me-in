@@ -17,7 +17,6 @@ export async function whoami(reqBody) {
   }
 }
 
-// create
 export async function signup(reqBody) {
   try {
     const { firstName, lastName, email, password } = reqBody;
@@ -34,7 +33,7 @@ export async function signup(reqBody) {
     console.error(error);
   }
 }
-// update
+
 export async function update(id, reqBody) {
   try {
     return await userRepo.update(id, reqBody);
@@ -42,7 +41,7 @@ export async function update(id, reqBody) {
     console.error(error);
   }
 }
-// delete
+
 export async function remove(id) {
   return await userRepo.delete(id);
 }
