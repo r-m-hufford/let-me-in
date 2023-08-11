@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { User } from '../models/user';
 import { myDataSource } from '../../app-data-source';
 import { generateToken } from '../utils/jwt';
-import { signup, update, whoami } from '../services/users';
+import { remove, signup, update, whoami } from '../services/users';
 import { confirmNewPassword } from '../services/password';
 
 const userRepo = myDataSource.getRepository(User);
@@ -42,7 +42,7 @@ userRouter.get("/whoami", async (req: Request, res: Response) => {
 
 userRouter.post("/signup", async (req: Request, res: Response) => {
   try {
-    if (confirmNewPassword(req.body)) return res.status(401).json({ error: 'passwords do not match' })
+    if (!confirmNewPassword(req.body)) return res.status(401).json({ error: 'passwords do not match' })
   
     const user = await signup(req.body);
     const token = generateToken(user);
@@ -69,7 +69,7 @@ userRouter.put("/:id", async (req: Request, res: Response) => {
 
 userRouter.delete("/:id", async (req: Request, res: Response) => {
   try {
-    const user = await userRepo.delete(req.params.id);
+    const user = await remove(req.params.id);
     res.json(user);
   } catch (error) {
     console.error(error);

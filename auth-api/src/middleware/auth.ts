@@ -3,6 +3,7 @@ import { generateToken } from "../utils/jwt";
 import { User } from "../models/user";
 import { myDataSource } from "../../app-data-source";
 import { RevokedToken } from "../models/revoked-token";
+import { checkForRevokedToken, getAllRecords, getAllTokens } from "../services/revoked-tokens";
 const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
 
 
@@ -21,7 +22,7 @@ export async function auth(req, res, next) {
     return res.status(401).json({ error: 'Unauthorized' });
   };
 
-  if (await checkForRevokedToken(token)) return res.status(401).json({ error: 'Invalid Token' });
+  if (await tokenIsRevoked(token)) return res.status(401).json({ error: 'Invalid Token' });
 
   try {
     verifyToken(token);
@@ -50,32 +51,20 @@ export async function auth(req, res, next) {
   }
 }
 
-async function checkForRevokedToken(token): Promise<boolean> {
-  const revokedTokens = await revokedTokenRepo.find();
-
-  for (let revokedToken of revokedTokens) {
-    if (token === revokedToken.token) return true
-  };
-  return false;
+async function tokenIsRevoked(token): Promise<boolean> {
+  const revokedTokens = await getAllTokens();
+  return checkForRevokedToken(token, revokedTokens);
 }
-
-// refactor check for revoked tokens
-// fetch tokens - this can get put in a token service
-
-// check if a token is included
-
-// put the steps together
-
 
 function userIsSigningUpOrLoggingIn(url: string, method: string): boolean {
   return method === 'POST' && (url === '/api/users/signup' || url === '/api/auth/login');
 }
 
-function verifyToken(token: string) {
+function verifyToken(token: string): boolean {
   return jwt.verify(token, process.env.JWT_PRIVATE_KEY);
 }
 
-function setReqUserCode(token: string) {
+function setReqUserCode(token: string): string {
   const decoded = jwt.decode(token);
   return decoded.userCode;
 }
