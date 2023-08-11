@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { User } from '../models/user';
 import { myDataSource } from '../../app-data-source';
 import { generateToken } from '../utils/jwt';
-import { whoami } from '../services/users';
+import { signup, update, whoami } from '../services/users';
 const userRepo = myDataSource.getRepository(User);
 
 export const userRouter = express.Router();
@@ -40,18 +40,10 @@ userRouter.get("/whoami", async (req: Request, res: Response) => {
 
 userRouter.post("/signup", async (req: Request, res: Response) => {
   try {
-    const { firstName, lastName, email, password, confirmPassword } = req.body;
-  
+    const { password, confirmPassword } = req.body;
     if (password !== confirmPassword) return res.status(401).json({ error: 'passwords do not match' })
-    let user = new User()
   
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.email = email;
-    user.password = password;
-  
-    user = await userRepo.save(user);
-  
+    const user = await signup(req.body);
     const token = generateToken(user);
   
     res.status(201).json(token);
@@ -63,7 +55,7 @@ userRouter.post("/signup", async (req: Request, res: Response) => {
 
 userRouter.put("/:id", async (req: Request, res: Response) => {
   try {
-    const user = await userRepo.update(req.params.id, req.body);
+    const user = await update(req.params.id, req.body);
 
     if (!user) res.status(404).json({ message: 'user not found' });
 
