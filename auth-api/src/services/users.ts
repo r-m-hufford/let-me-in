@@ -3,16 +3,16 @@ import { User } from "../models/user";
 import { generateToken } from "../utils/jwt";
 const userRepo = myDataSource.getRepository(User);
 
-export async function whoami(reqBody): Promise<User> {
+export async function whoami(reqBody): Promise<Partial<User>> {
   try {
-    let user = await userRepo.findOne({ 
+    const user = await userRepo.findOne({ 
       where: {
         userCode: reqBody.userCode
       },
       relations: ['roles', 'roles.permissions']
      });
-     user = sanitizeUserResponse(user);
-     return user;
+     const santiziedUser = sanitizeUserResponse(user);
+     return santiziedUser;
   } catch (error) {
     console.error(error)
   }

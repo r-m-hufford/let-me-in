@@ -12,7 +12,7 @@ const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
  * @param refreshIn same as expiresIn. This value must be greater than expiresIn to be useful
  * @returns a json web token
  */
-export function generateToken(user: User, expiresIn: number | string = '1d', refreshIn: number | string = '5d') {
+export function generateToken(user: Partial<User>, expiresIn: number | string = '1d', refreshIn: number | string = '5d') {
   const accessToken = jwt.sign(
     { email: user.email, userCode: user.userCode, type: 'ACCESS' }, 
     process.env.JWT_PRIVATE_KEY, 

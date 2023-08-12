@@ -35,9 +35,11 @@ export async function auth(req, res, next) {
       if (!refreshToken) res.status(401).json({ error: 'Unauthorized' });
       try {
         // verify the refresh token
+        // this needs fixed | verify returns a boolean not data. I need both. 
+        // verify the token and decode it.
         const refreshData = verifyToken(refreshToken);
         // create the new tokens
-        token = generateToken({ email: refreshData.email, userCode: refreshData.userCode } as User);
+        token = generateToken({ email: refreshData.email, userCode: refreshData.userCode } as Partial<User>);
         req.body.userCode = setReqUserCode(token);
         // res.header(token);
         return next();
@@ -60,10 +62,12 @@ function userIsSigningUpOrLoggingIn(url: string, method: string): boolean {
   return method === 'POST' && (url === '/api/users/signup' || url === '/api/auth/login');
 }
 
+// this can get moved to the jwt util
 function verifyToken(token: string): boolean {
   return jwt.verify(token, process.env.JWT_PRIVATE_KEY);
 }
 
+// this needs renamed. it does not set the user code it just returns it. get reqUserCode
 function setReqUserCode(token: string): string {
   const decoded = jwt.decode(token);
   return decoded.userCode;
