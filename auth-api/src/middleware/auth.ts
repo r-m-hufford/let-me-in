@@ -3,7 +3,7 @@ import { generateToken } from "../utils/jwt";
 import { User } from "../models/user";
 import { myDataSource } from "../../app-data-source";
 import { RevokedToken } from "../models/revoked-token";
-import { checkForRevokedToken, getAllRecords, getAllTokens } from "../services/revoked-tokens";
+import { checkForRevokedToken, getAllTokens } from "../services/revoked-tokens";
 const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
 
 
@@ -35,9 +35,8 @@ export async function auth(req, res, next) {
       if (!refreshToken) res.status(401).json({ error: 'Unauthorized' });
       try {
         // verify the refresh token
-        // this needs fixed | verify returns a boolean not data. I need both. 
-        // verify the token and decode it.
-        const refreshData = verifyToken(refreshToken);
+        if (!verifyToken(refreshToken)) res.status(401).json({ error: 'Unauthorized' });
+        const refreshData = jwt.decode(refreshToken);
         // create the new tokens
         token = generateToken({ email: refreshData.email, userCode: refreshData.userCode } as Partial<User>);
         req.body.userCode = setReqUserCode(token);
