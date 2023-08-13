@@ -10,7 +10,8 @@
     "predevelop": "npm run build",
     "develop": "npx tsc -w & nodemon dist/src/index.js",
     "token:cleanup": "ts-node src/scripts/revoked-token-cleanup.ts",
-    "test": "jest"
+    "test": "jest",
+    "test:file": "cross-env TEST_FILE= jest --testPathPattern=$TEST_FILE"
   },
   "keywords": [],
   "author": "",
