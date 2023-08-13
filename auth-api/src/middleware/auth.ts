@@ -1,10 +1,7 @@
 import { TokenExpiredError } from "jsonwebtoken";
-import { generateToken } from "../utils/jwt";
+import { decodeToken, generateTokens, verifyToken } from "../utils/jwt";
 import { User } from "../models/user";
-import { myDataSource } from "../../app-data-source";
-import { RevokedToken } from "../models/revoked-token";
 import { checkForRevokedToken, getAllTokens } from "../services/revoked-tokens";
-const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
 
 
 const jwt = require('jsonwebtoken');
@@ -36,9 +33,9 @@ export async function auth(req, res, next) {
       try {
         // verify the refresh token
         if (!verifyToken(refreshToken)) res.status(401).json({ error: 'Unauthorized' });
-        const refreshData = jwt.decode(refreshToken);
+        const refreshData = decodeToken(refreshToken);
         // create the new tokens
-        token = generateToken({ email: refreshData.email, userCode: refreshData.userCode } as Partial<User>);
+        token = generateTokens({ email: refreshData.email, userCode: refreshData.userCode } as Partial<User>);
         req.body.userCode = setReqUserCode(token);
         // res.header(token);
         return next();
@@ -62,9 +59,7 @@ function userIsSigningUpOrLoggingIn(url: string, method: string): boolean {
 }
 
 // this can get moved to the jwt util
-function verifyToken(token: string): boolean {
-  return jwt.verify(token, process.env.JWT_PRIVATE_KEY);
-}
+
 
 // this needs renamed. it does not set the user code it just returns it. get reqUserCode
 function setReqUserCode(token: string): string {

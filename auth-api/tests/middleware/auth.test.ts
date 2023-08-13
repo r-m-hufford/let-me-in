@@ -1,0 +1,1 @@
+import { auth } from "../../src/middleware/auth";

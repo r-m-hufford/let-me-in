@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { generateToken } from '../utils/jwt';
+import { generateTokens } from '../utils/jwt';
 import { myDataSource } from '../../app-data-source';
 import { User } from '../models/user';
 import { validatePassword } from '../services/password';
@@ -20,7 +20,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
     const validatedPassword = await validatePassword(req.body, user);
     if (!validatedPassword) res.status(400).json({ error: 'Invalid email or password' })
  
-    const token = generateToken(user);
+    const token = generateTokens(user);
  
     res.status(200).json(token);
    } catch (error) {

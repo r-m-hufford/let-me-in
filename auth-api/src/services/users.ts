@@ -1,6 +1,6 @@
 import { myDataSource } from "../../app-data-source";
 import { User } from "../models/user";
-import { generateToken } from "../utils/jwt";
+import { generateTokens } from "../utils/jwt";
 const userRepo = myDataSource.getRepository(User);
 
 export async function whoami(reqBody): Promise<Partial<User>> {
@@ -23,6 +23,18 @@ export async function getByEmail(reqBody): Promise<User> {
     return await userRepo.findOne({ 
        where: {
          email: reqBody.email
+       }
+      });
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function getById(id): Promise<User> {
+  try {
+    return await userRepo.findOne({ 
+       where: {
+         userId: id
        }
       });
   } catch (error) {
@@ -56,8 +68,21 @@ export async function update(id, reqBody) {
 }
 
 export async function remove(id) {
-  return await userRepo.delete(id);
+  try {
+    return await userRepo.delete(id);
+  } catch (error) {
+    console.error(error);
+  }
 }
+export async function updateAndReturnUser(id, reqBody) {
+  try {
+    await update(id, reqBody);
+    return await getById(id)
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 
 // remove properties that should not be in the response
 function sanitizeUserResponse(user: User): Partial<User> {

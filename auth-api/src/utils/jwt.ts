@@ -4,6 +4,12 @@ import { User } from "../models/user";
 import { myDataSource } from '../../app-data-source';
 const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
 
+interface DecodedToken {
+  email: string;
+  userCode: string;
+  type: string;
+}
+
 /**
  * 
  * @param user a user object
@@ -12,7 +18,7 @@ const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
  * @param refreshIn same as expiresIn. This value must be greater than expiresIn to be useful
  * @returns a json web token
  */
-export function generateToken(user: Partial<User>, expiresIn: number | string = '1d', refreshIn: number | string = '5d') {
+export function generateTokens(user: Partial<User>, expiresIn: number | string = '1d', refreshIn: number | string = '5d') {
   const accessToken = jwt.sign(
     { email: user.email, userCode: user.userCode, type: 'ACCESS' }, 
     process.env.JWT_PRIVATE_KEY, 
@@ -41,4 +47,12 @@ export async function invalidateToken(token) {
   revokedToken.expiresAt = new Date(decoded.exp * 1000);
 
   revokedToken = await revokedTokenRepo.save(revokedToken)
+}
+
+export function verifyToken(token: string): boolean {
+  return jwt.verify(token, process.env.JWT_PRIVATE_KEY);
+}
+
+export function decodeToken(token: string): DecodedToken {
+  return jwt.decode(token);
 }
