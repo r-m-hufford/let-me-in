@@ -23,7 +23,7 @@ export async function auth(req, res, next) {
 
   try {
     verifyToken(token);
-    req.body.userCode = setReqUserCode(token);
+    req.body.userCode = getReqUserCode(token);
     next();
   } catch (error) {
     if (error instanceof TokenExpiredError) {
@@ -36,7 +36,7 @@ export async function auth(req, res, next) {
         const refreshData = decodeToken(refreshToken);
         // create the new tokens
         token = generateTokens({ email: refreshData.email, userCode: refreshData.userCode } as Partial<User>);
-        req.body.userCode = setReqUserCode(token);
+        req.body.userCode = getReqUserCode(token);
         // res.header(token);
         return next();
       } catch (error) {
@@ -58,11 +58,7 @@ function userIsSigningUpOrLoggingIn(url: string, method: string): boolean {
   return method === 'POST' && (url === '/api/users/signup' || url === '/api/auth/login');
 }
 
-// this can get moved to the jwt util
-
-
-// this needs renamed. it does not set the user code it just returns it. get reqUserCode
-function setReqUserCode(token: string): string {
-  const decoded = jwt.decode(token);
+function getReqUserCode(token: string): string {
+  const decoded = decodeToken(token);
   return decoded.userCode;
 }
