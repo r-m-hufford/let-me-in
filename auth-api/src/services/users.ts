@@ -1,9 +1,8 @@
 import { myDataSource } from "../../app-data-source";
 import { User } from "../models/user";
-import { generateTokens } from "../utils/jwt";
-const userRepo = myDataSource.getRepository(User);
+export const userRepo = myDataSource.getRepository(User);
 
-export async function whoami(reqBody): Promise<Partial<User>> {
+export async function whoami(reqBody): Promise<User> {
   try {
     const user = await userRepo.findOne({ 
       where: {
@@ -11,8 +10,7 @@ export async function whoami(reqBody): Promise<Partial<User>> {
       },
       relations: ['roles', 'roles.permissions']
      });
-     const santiziedUser = sanitizeUserResponse(user);
-     return santiziedUser;
+     return user;
   } catch (error) {
     console.error(error)
   }
@@ -85,7 +83,7 @@ export async function updateAndReturnUser(id, reqBody) {
 
 
 // remove properties that should not be in the response
-function sanitizeUserResponse(user: User): Partial<User> {
+export function sanitizeUserResponse(user: User): Partial<User> {
   delete user.password;
   delete user.userId;
   return user;
