@@ -1,16 +1,10 @@
 import { myDataSource } from "../../app-data-source";
 import { RevokedToken } from "../models/revoked-token";
 
-const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
-
-export async function getAllRecords(): Promise<RevokedToken[]> {
-  const tokens = await revokedTokenRepo.find()
-  console.log({ tokens });
-  return tokens;
-}
+export const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
 
 export async function getAllTokens(): Promise<string[]> {
-  const revokedTokens = await getAllRecords()
+  const revokedTokens = await revokedTokenRepo.find();
   return revokedTokens.map((rt) => rt.token);
 }
 
