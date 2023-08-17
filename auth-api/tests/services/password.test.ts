@@ -1,31 +1,41 @@
 import * as bcrypt from 'bcrypt';
 import { hashPassword, validatePassword, confirmNewPassword } from "../../src/services/password";
+import { User } from '../../src/models/user';
 
 jest.mock('bcrypt', () => ({
   genSalt: jest.fn(),
-  hash: jest.fn()
+  hash: jest.fn(),
+  compare: jest.fn()
 }))
-describe('password service', () => {
-  let user; 
 
-  beforeAll( () => {
-    user = {
-      password: 'match'
-    }
-  }
-  )
-  it('validate matching passwords', async () => {
-    const matchingPasswords = await validatePassword('match', user.password)
-    expect(matchingPasswords).toBeTruthy();
-  });
-
+describe('validate password', () => {
+  it('matching passwords', async () => {
+    const reqBody = {password: 'myPassword'};
+    const user = {password: 'myHashedPassword'} as User;
   
-  it('validate non-matching passwords', async () => {
-    const notMatchingPasswords = await validatePassword('notmatch', user.password)
-    expect(notMatchingPasswords).toBeFalsy();
+    (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+  
+    const result = await validatePassword(reqBody, user);
+  
+    expect(result).toBeTruthy();
   });
+  
+  
+  it('non-matching passwords', async () => {
+    const reqBody = {password: 'myPassword'};
+    const user = {password: 'myHashedPassword'} as User;
+  
+    (bcrypt.compare as jest.Mock).mockResolvedValue(false);
+  
+    const result = await validatePassword(reqBody, user);
+  
+    expect(result).toBeFalsy();
+  });
+})
 
-  it('confirmation password matches', () => {
+
+describe('signup password confirmation', () => {  
+  it('password matches', () => {
     const reqBody = {
       password: 'matching',
       confirmPassword: 'matching'
@@ -34,7 +44,7 @@ describe('password service', () => {
     expect(confirmPassword).toBeTruthy();
   });
   
-  it('confirmation password does not match', () => {
+  it('password does not match', () => {
     const reqBody = {
       password: 'matching',
       confirmPassword: 'notmatching'
@@ -42,15 +52,35 @@ describe('password service', () => {
     const confirmPassword = confirmNewPassword(reqBody)
     expect(confirmPassword).toBeFalsy();
   });
+})
 
-  it('hash should return a non-empty string', async () => {
+describe('hash password', () => {  
+  afterEach(() => {
+    delete process.env.AUTH_PEPPER;
+  });
+
+  it('should return a non-empty string', async () => {
     (bcrypt.genSalt as jest.Mock).mockResolvedValue('mocked-salt');
     (bcrypt.hash as jest.Mock).mockResolvedValue('mocked-hash');
 
     const hashedPassword = await hashPassword('password');
-
+    
     expect(hashedPassword).toBeDefined();
     expect(typeof hashedPassword).toBe('string');
     expect(hashedPassword.length).toBeGreaterThan(0);
   });
+  
+  it('should generate a hash based on input password and salt', async () => {
+    (bcrypt.genSalt as jest.Mock).mockResolvedValue('mocked-salt');
+    (bcrypt.hash as jest.Mock).mockResolvedValue('mocked-hash');
+
+    // Mock the process.env.AUTH_PEPPER for the test
+    process.env.AUTH_PEPPER = 'mocked-pepper';
+  
+    const hashedPassword = await hashPassword('password');
+    
+    expect(bcrypt.genSalt).toBeCalledWith(10);
+    expect(bcrypt.hash).toBeCalledWith(`passwordmocked-pepper`, 'mocked-salt');
+    expect(hashedPassword).toBe('mocked-hash');
+  })
 })
