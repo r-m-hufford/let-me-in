@@ -11,7 +11,7 @@
     "develop": "npx tsc -w & nodemon dist/src/index.js",
     "token:cleanup": "ts-node src/scripts/revoked-token-cleanup.ts",
     "test": "jest",
-    "test:file": "cross-env TEST_FILE= jest --testPathPattern=$TEST_FILE"
+    "test:file": "jest -- --testPathPattern=$1"
   },
   "keywords": [],
   "author": "",
