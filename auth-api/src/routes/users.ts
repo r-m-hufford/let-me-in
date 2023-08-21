@@ -1,80 +1,46 @@
 import express, { Request, Response } from 'express';
 import { User } from '../models/user';
 import { myDataSource } from '../../app-data-source';
-import { generateToken } from '../utils/jwt';
+import { generateTokens } from '../utils/jwt';
+import { getById, remove, sanitizeUserResponse, signup, update, whoami } from '../services/users';
+import { confirmNewPassword } from '../services/password';
+
 const userRepo = myDataSource.getRepository(User);
 
 export const userRouter = express.Router();
 
-// leaving for now might use for getting other accounts
-// userRouter.get("/:id", async (req: Request, res: Response) => {
-//   try {
-//     const user = await userRepo.findOne({ 
-//       where: {
-//         userId: parseInt(req.params.id)
-//       },
-//       relations: ['roles', 'roles.permissions']
-//      });
-  
-//     if (!user) res.status(404).json({ message: 'user not found' });
-    
-//     res.status(200).json(user);
-    
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'internal server error' });
-//   }
-// })
-
 userRouter.get("/whoami", async (req: Request, res: Response) => {
     try {
-    const user = await userRepo.findOne({ 
-      where: {
-        userCode: req.body.userCode
-      },
-      relations: ['roles', 'roles.permissions']
-     });
-  
-    if (!user) res.status(404).json({ message: 'user not found' });
-
-    // do not return these properties
-    delete user.password;
-    delete user.userId;
-    
-    res.status(200).json(user);
-    
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'internal server error' });
+      const user = await whoami(req.body);
+      if (!user) return res.status(404).json({ message: 'user not found' });
+      const sanitizedUser = sanitizeUserResponse(user);
+      res.status(200).json(sanitizedUser);
+    } catch (error) {
+      // console.error(error);
+      res.status(500).json({ error: 'internal server error' });
+    }
   }
-})
-
-userRouter.post("/signup", async (req: Request, res: Response) => {
-  try {
-    const { firstName, lastName, email, password, confirmPassword } = req.body;
+  )
   
-    if (password !== confirmPassword) return res.status(401).json({ error: 'passwords do not match' })
-    let user = new User()
-  
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.email = email;
-    user.password = password;
-  
-    user = await userRepo.save(user);
-  
-    const token = generateToken(user);
-  
-    res.status(201).json(token);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'internal server error' });
-  }
+  userRouter.post("/signup", async (req: Request, res: Response) => {
+    try {
+      if (!confirmNewPassword(req.body)) return res.status(401).json({ error: 'passwords do not match' })
+      
+      const user = await signup(req.body);
+      const token = generateTokens(user);
+      
+      res.status(201).json(token);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'internal server error' });
+    }
 })
 
 userRouter.put("/:id", async (req: Request, res: Response) => {
   try {
-    const user = await userRepo.update(req.params.id, req.body);
+    await update(req.params.id, req.body);
+
+    const user = await getById(req.params.id);
 
     if (!user) res.status(404).json({ message: 'user not found' });
 
@@ -87,7 +53,7 @@ userRouter.put("/:id", async (req: Request, res: Response) => {
 
 userRouter.delete("/:id", async (req: Request, res: Response) => {
   try {
-    const user = await userRepo.delete(req.params.id);
+    const user = await remove(req.params.id);
     res.json(user);
   } catch (error) {
     console.error(error);
