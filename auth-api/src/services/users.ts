@@ -12,7 +12,8 @@ export async function whoami(reqBody): Promise<User> {
      });
      return user;
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    throw error;
   }
 }
 
@@ -24,7 +25,8 @@ export async function getByEmail(reqBody): Promise<User> {
        }
       });
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    throw error;
   }
 }
 
@@ -36,24 +38,24 @@ export async function getById(id): Promise<User> {
        }
       });
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    throw error;
   }
 }
 
 export async function signup(reqBody): Promise<User> {
   try {
-    const { firstName, lastName, email, password } = reqBody;
+    delete reqBody.confirmPassword;
+
     let user = new User()
   
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.email = email;
-    user.password = password;
+    user = {...reqBody};
   
     return await userRepo.save(user);
   
   } catch (error) {
     console.error(error);
+    throw error;
   }
 }
 
@@ -62,25 +64,19 @@ export async function update(id, reqBody) {
     return await userRepo.update(id, reqBody);
   } catch (error) {
     console.error(error);
+    throw error;
   }
 }
 
 export async function remove(id) {
   try {
-    return await userRepo.delete(id);
+    const user = await userRepo.delete(id);
+    return user;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 }
-export async function updateAndReturnUser(id, reqBody) {
-  try {
-    await update(id, reqBody);
-    return await getById(id)
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 
 // remove properties that should not be in the response
 export function sanitizeUserResponse(user: User): Partial<User> {

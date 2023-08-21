@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { User } from '../models/user';
 import { myDataSource } from '../../app-data-source';
 import { generateTokens } from '../utils/jwt';
-import { getById, remove, sanitizeUserResponse, signup, update, updateAndReturnUser, whoami } from '../services/users';
+import { getById, remove, sanitizeUserResponse, signup, update, whoami } from '../services/users';
 import { confirmNewPassword } from '../services/password';
 
 const userRepo = myDataSource.getRepository(User);
@@ -39,7 +39,7 @@ userRouter.put("/:id", async (req: Request, res: Response) => {
   try {
     await update(req.params.id, req.body);
 
-    const user = getById(req.params.id);
+    const user = await getById(req.params.id);
 
     if (!user) res.status(404).json({ message: 'user not found' });
 
