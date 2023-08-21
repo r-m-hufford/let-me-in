@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 import { RevokedToken } from "../models/revoked-token";
 import { User } from "../models/user";
 import { myDataSource } from '../../app-data-source';
-const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
+export const revokedTokenRepo = myDataSource.getRepository(RevokedToken);
 
 interface DecodedToken {
   email: string;

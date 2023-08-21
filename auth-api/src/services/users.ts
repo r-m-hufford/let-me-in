@@ -70,8 +70,7 @@ export async function update(id, reqBody) {
 
 export async function remove(id) {
   try {
-    const user = await userRepo.delete(id);
-    return user;
+    return await userRepo.delete(id);
   } catch (error) {
     console.error(error);
     throw error;
