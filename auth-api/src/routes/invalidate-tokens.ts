@@ -8,10 +8,9 @@ const jwt = require('jsonwebtoken');
 export const invalidateTokensRouter = express.Router();
 
 invalidateTokensRouter.post('/', async (req: Request, res: Response) => {
-  
   let revokedToken = await invalidateToken(req.header('x-auth-token'));
 
-  res.json(
+  res.status(200).json(
     {
       message: 'token revoked',
       revokedToken
