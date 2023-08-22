@@ -46,7 +46,7 @@ export async function invalidateToken(token) {
   revokedToken.iat = new Date(decoded.iat * 1000);
   revokedToken.expiresAt = new Date(decoded.exp * 1000);
 
-  revokedToken = await revokedTokenRepo.save(revokedToken)
+  revokedToken = await revokedTokenRepo.save(revokedToken);
 }
 
 export function verifyToken(token: string): boolean {
