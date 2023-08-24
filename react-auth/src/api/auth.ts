@@ -20,3 +20,8 @@ export const invalidateToken = async (token: string) => {
   const response = await apiInstance.post('/api/invalidatetokens');
   return response.data;
 }
+
+export const whoami = async () => {
+  const response = await apiInstance.get('/api/users/whoami')
+  return response.data;
+}
