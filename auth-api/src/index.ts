@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import cors from 'cors';
 import { routes } from './routes';
 import { myDataSource } from '../app-data-source';
 import { auth } from './middleware/auth';
@@ -13,6 +14,7 @@ myDataSource
   });
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(auth);
 
