@@ -22,7 +22,10 @@ authRouter.post('/login', async (req: Request, res: Response) => {
  
     const token = generateTokens(user);
  
-    res.status(200).json(token);
+    res.status(200).json({
+      success: true,
+      token
+    });
    } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'internal server error' });
