@@ -6,7 +6,7 @@ export const test = async () => {
 }
 
 export const login = async (credentials: { username: string, password: string }) => {
-  const response = await apiInstance.post('/api/auth/login');
+  const response = await apiInstance.post('/api/auth/login', credentials);
   return response.data;
 }
 

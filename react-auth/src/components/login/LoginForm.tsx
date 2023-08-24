@@ -8,7 +8,7 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await test();
+    const response = await login({username: email, password});
     console.log(response);
   }
 
@@ -26,7 +26,7 @@ const LoginForm: React.FC = () => {
         <input 
           type="password"
           value={password}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">Login</button>
       </form>
