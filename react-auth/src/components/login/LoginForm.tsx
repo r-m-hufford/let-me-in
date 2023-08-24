@@ -1,18 +1,22 @@
 import React, { ChangeEvent, useState } from 'react';
 import { login } from '../../api/auth';
+import { useNavigate } from 'react-router-dom';
 // write and import some styles for this jawn
 
 const LoginForm: React.FC = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+    const { value } = e.target;
+    setEmail(value);
     setErrorMessage('');
   }
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
     setPassword(e.target.value);
     setErrorMessage('');
   }
@@ -21,10 +25,12 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
     try {
       const response = await login({username: email, password});
-      // handle successful login - probs navigate to the other jawn
-      // for now just....
-      console.log('you logged into the jawn');
+      console.log({ response });
+      if (response.success) {
+        navigate('/account');
+      }
     } catch (error: any) {
+      // this can get moved to the auth api eventually
       if (error.response && error.response.status == 400) {
         setErrorMessage('invalid email or password')
       } else {
