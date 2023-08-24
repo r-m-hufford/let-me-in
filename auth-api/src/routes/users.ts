@@ -16,7 +16,7 @@ userRouter.get("/whoami", async (req: Request, res: Response) => {
       const sanitizedUser = sanitizeUserResponse(user);
       res.status(200).json(sanitizedUser);
     } catch (error) {
-      // console.error(error);
+      console.error(error);
       res.status(500).json({ error: 'internal server error' });
     }
   }
