@@ -27,6 +27,7 @@ const LoginForm: React.FC = () => {
       const response = await login({username: email, password});
       console.log({ response });
       if (response.success) {
+        window.localStorage.setItem('accessToken', response.token.accessToken);
         navigate('/account');
       }
     } catch (error: any) {
