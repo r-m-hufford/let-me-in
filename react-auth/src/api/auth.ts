@@ -10,7 +10,6 @@ export const login = async (credentials: { username: string, password: string })
   return response.data;
 }
 
-// create a userData interface
 export const signup = async (userData: any) => {
   const response = await apiInstance.post('/api/users/signup', userData);
   return response.data;
@@ -21,7 +20,7 @@ export const invalidateToken = async (token: string) => {
   return response.data;
 }
 
-export const whoami = async () => {
-  const response = await apiInstance.get('/api/users/whoami')
+export const whoami = async (userEmail: any) => {
+  const response = await apiInstance.get('/api/users/whoami', userEmail)
   return response.data;
 }

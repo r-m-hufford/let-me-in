@@ -24,6 +24,7 @@ export async function auth(req, res, next) {
   try {
     verifyToken(token);
     req.body.userCode = getReqUserCode(token);
+
     next();
   } catch (error) {
     if (error instanceof TokenExpiredError) {

@@ -21,7 +21,7 @@ export async function getByEmail(reqBody): Promise<User> {
   try {
     return await userRepo.findOne({ 
        where: {
-         email: reqBody.email
+         email: reqBody.username
        }
       });
   } catch (error) {

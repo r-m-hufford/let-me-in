@@ -10,17 +10,16 @@ const userRepo = myDataSource.getRepository(User);
 export const userRouter = express.Router();
 
 userRouter.get("/whoami", async (req: Request, res: Response) => {
-    try {
-      const user = await whoami(req.body);
-      if (!user) return res.status(404).json({ message: 'user not found' });
-      const sanitizedUser = sanitizeUserResponse(user);
-      res.status(200).json(sanitizedUser);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'internal server error' });
-    }
+  try {
+    const user = await whoami(req.body);
+    if (!user) return res.status(404).json({ message: 'user not found' });
+    const sanitizedUser = sanitizeUserResponse(user);
+    res.status(200).json(sanitizedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'internal server error' });
   }
-  )
+})
   
 userRouter.post("/signup", async (req: Request, res: Response) => {
   try {
@@ -41,7 +40,6 @@ userRouter.put("/:id", async (req: Request, res: Response) => {
     await update(req.params.id, req.body);
 
     const user = await getById(req.params.id);
-    console.log({ user });
     if (!user) return res.status(404).json({ message: 'user not found' });
 
     res.status(200).json(user);
