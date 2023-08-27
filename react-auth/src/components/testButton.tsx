@@ -1,9 +1,9 @@
-import { test } from "../api/auth";
+import { test, whoami } from "../api/auth";
 
 const Test = () => {
   const handleTest = async () => {
-    const result = await test()
-    console.log({ result });
+    // const result = await whoami()
+    console.log({ result: 'email or something' });
   }
 
   return (
