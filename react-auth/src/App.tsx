@@ -11,7 +11,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/account' element={
-        <PrivateRoute>
+        <PrivateRoute fallback={'/login'} >
           <Account/>
         </PrivateRoute>} />
       </Routes>

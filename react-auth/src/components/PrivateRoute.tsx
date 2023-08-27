@@ -1,17 +1,11 @@
 import React from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 
-// interface PrivateRouteProps {
-//   path: string;
-//   element: React.ReactNode;
-//   fallback: string;
-// }
-
 //@ts-ignore
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ children, fallback }) => {
   const isAuthenticated = checkIfUserIsAuthenticated();
 
-  return isAuthenticated ? children : <Navigate to={'/login'} />;
+  return isAuthenticated ? children : <Navigate to={fallback} />;
 };
 
 const checkIfUserIsAuthenticated = (): boolean => {
