@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import { login } from '../../api/auth';
 import { useNavigate } from 'react-router-dom';
+import { handleInputChange } from '../../utils/inputChange';
 // write and import some styles for this jawn
 
 const LoginForm: React.FC = () => {
@@ -8,18 +9,6 @@ const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setEmail(value);
-    setErrorMessage('');
-  }
-
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setPassword(e.target.value);
-    setErrorMessage('');
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,14 +38,14 @@ const LoginForm: React.FC = () => {
           type="email"
           id='email'
           value={email} 
-          onChange={(e) => handleEmailChange(e)} 
+          onChange={(e) => handleInputChange(e, setEmail)} 
         />
         <label htmlFor='password'>Password:</label>
         <input 
           type="password"
           id='password'
           value={password}
-          onChange={(e) => handlePasswordChange(e)}
+          onChange={(e) => handleInputChange(e, setPassword)}
         />
         {errorMessage && <p>{errorMessage}</p>}
         <button type="submit">Login</button>
