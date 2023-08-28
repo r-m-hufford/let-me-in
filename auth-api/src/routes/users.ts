@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { body, validationResult } from 'express-validator';
 import { User } from '../models/user';
 import { myDataSource } from '../../app-data-source';
 import { generateTokens } from '../utils/jwt';
@@ -21,7 +22,13 @@ userRouter.get("/whoami", async (req: Request, res: Response) => {
   }
 })
   
-userRouter.post("/signup", async (req: Request, res: Response) => {
+userRouter.post("/signup", body('firstName').notEmpty().withMessage('firstName cannot be empty').escape() ,async (req: Request, res: Response) => {
+  const validationErrors = validationResult(req);
+  console.log('validation: ', validationErrors);
+  if (!validationErrors.isEmpty()) {
+    return res.json({ error: validationErrors.array() });
+  }
+  
   try {
     if (!confirmNewPassword(req.body)) return res.status(401).json({ error: 'passwords do not match' })
 
