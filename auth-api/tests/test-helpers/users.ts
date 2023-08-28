@@ -10,10 +10,7 @@ export function getTestUser(): User {
     password: 'password',
     createdAt: new Date(),
     modifiedAt: new Date(),
-    roles: [],
-    prepForInsert: function (): Promise<void> {
-      throw new Error("Function not implemented.");
-    }
+    roles: []
   };
 }
 
@@ -25,10 +22,7 @@ export function getTestSanitizedUser(): Partial<User> {
     email: 'jane@doe.com',
     createdAt: new Date(),
     modifiedAt: new Date(),
-    roles: [],
-    prepForInsert: function (): Promise<void> {
-      throw new Error("Function not implemented.");
-    }
+    roles: []
   };
 }
 
@@ -43,9 +37,6 @@ export function getTestNewUser(): User {
     password: 'password',
     createdAt: new Date(),
     modifiedAt: new Date(),
-    roles: [],
-    prepForInsert: function (): Promise<void> {
-      throw new Error("Function not implemented.");
-    }
+    roles: []
   };
 }

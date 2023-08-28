@@ -5,7 +5,7 @@ import { myDataSource } from '../../app-data-source';
 import { generateTokens } from '../utils/jwt';
 import { getById, remove, sanitizeUserResponse, signup, update, whoami } from '../services/users';
 import { confirmNewPassword, hashPassword } from '../services/password';
-import { signupValidation } from '../../src/validators/user-validation';
+import { signupValidation, updateValidation } from '../../src/validators/user-validation';
 
 const userRepo = myDataSource.getRepository(User);
 
@@ -49,7 +49,7 @@ userRouter.post("/signup", signupValidation() ,async (req: Request, res: Respons
   }
 })
 
-userRouter.put("/:id", async (req: Request, res: Response) => {
+userRouter.put("/:id", updateValidation, async (req: Request, res: Response) => {
   try {
     await update(req.params.id, req.body);
 

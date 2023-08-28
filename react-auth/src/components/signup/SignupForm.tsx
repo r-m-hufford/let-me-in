@@ -13,6 +13,7 @@ const SignupForm: React.FC = () => {
     password: undefined,
     confirmPassword: undefined
   });
+  const [error, setErrors] = useState([])
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
