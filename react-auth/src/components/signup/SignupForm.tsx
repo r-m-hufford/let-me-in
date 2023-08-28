@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleInputChange } from "../../utils/inputChange";
+import { signup } from "../../api/auth";
 
 const SignupForm: React.FC = () => {
   const navigate = useNavigate();
@@ -15,7 +16,16 @@ const SignupForm: React.FC = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log('handle sign up', form);
-    //reset form
+
+    try {
+      const response = await signup(form);
+      if (response.success) {
+        window.localStorage.setItem('accessToken', response.token.accessToken);
+        navigate('/account');
+      }
+    } catch (error) {
+      
+    }
     setForm((prevData) => ({
       email: '',
       firstName: '',
