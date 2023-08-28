@@ -12,7 +12,7 @@ export const myDataSource = new DataSource({
     entities: [User, RevokedToken, Role, Permission],
     migrations: ['./src/migration'],
     migrationsTableName: 'migrations',
-    logging: true,
+    logging: false,
     synchronize: false,
     namingStrategy: new SnakeNamingStrategy()
 })
