@@ -5,6 +5,7 @@ import { myDataSource } from '../../app-data-source';
 import { generateTokens } from '../utils/jwt';
 import { getById, remove, sanitizeUserResponse, signup, update, whoami } from '../services/users';
 import { confirmNewPassword, hashPassword } from '../services/password';
+import { signupValidation } from '../../src/validators/user-validation';
 
 const userRepo = myDataSource.getRepository(User);
 
@@ -22,7 +23,7 @@ userRouter.get("/whoami", async (req: Request, res: Response) => {
   }
 })
   
-userRouter.post("/signup", body('firstName').notEmpty().withMessage('firstName cannot be empty').escape() ,async (req: Request, res: Response) => {
+userRouter.post("/signup", signupValidation() ,async (req: Request, res: Response) => {
   const validationErrors = validationResult(req);
   console.log('validation: ', validationErrors);
   if (!validationErrors.isEmpty()) {
