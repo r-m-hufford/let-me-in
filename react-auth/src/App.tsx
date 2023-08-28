@@ -5,6 +5,7 @@ import Login from './routes/Login';
 import Account from './routes/Account';
 import PrivateRoute from './components/PrivateRoute';
 import Signup from './routes/Signup';
+import NotFound from './components/NotFound';
 
 const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const App: React.FC = () => {
         <PrivateRoute fallback={'/login'} >
           <Account/>
         </PrivateRoute>} />
+        <Route path='/*' element={<NotFound />}/>
       </Routes>
     </Router>
   );
