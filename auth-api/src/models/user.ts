@@ -38,10 +38,4 @@ export class User {
     role => role.users
   )
   roles: Role[];
-
-  @BeforeInsert()
-  async prepForInsert() {
-    this.password = await hashPassword(this.password);
-  }
-
 }

@@ -1,30 +1,22 @@
 import React, { ChangeEvent, useState } from 'react';
 import { login } from '../../api/auth';
 import { useNavigate } from 'react-router-dom';
+import { handleInputChange } from '../../utils/inputChange';
+import LinkToButton from '../common/LinkToButton';
 // write and import some styles for this jawn
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [form, setForm] = useState({
+    email: '',
+    password: ''
+  });
   const [errorMessage, setErrorMessage] = useState('');
-
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setEmail(value);
-    setErrorMessage('');
-  }
-
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setPassword(e.target.value);
-    setErrorMessage('');
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await login({username: email, password});
+      const response = await login(form);
       if (response.success) {
         window.localStorage.setItem('accessToken', response.token.accessToken);
         navigate('/account');
@@ -43,24 +35,32 @@ const LoginForm: React.FC = () => {
   return (
     <div>
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor='email'>Email:</label>
-        <input 
-          type="email"
-          id='email'
-          value={email} 
-          onChange={(e) => handleEmailChange(e)} 
-        />
-        <label htmlFor='password'>Password:</label>
-        <input 
-          type="password"
-          id='password'
-          value={password}
-          onChange={(e) => handlePasswordChange(e)}
-        />
-        {errorMessage && <p>{errorMessage}</p>}
-        <button type="submit">Login</button>
-      </form>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor='email'>Email:</label>
+          <input
+            type="email"
+            name='email'
+            id='email'
+            value={form.email}
+            onChange={(e) => handleInputChange(e, setForm)}
+          />
+          <label htmlFor='password'>Password:</label>
+          <input
+            type="password"
+            name='password'
+            id='password'
+            value={form.password}
+            onChange={(e) => handleInputChange(e, setForm)}
+          />
+          {errorMessage && <p>{errorMessage}</p>}
+          <button type="submit">Login</button>
+        </form>
+      </div>
+      <div>
+        <h2>not a member?</h2>
+        <LinkToButton path={'/signup'} label={'sign up'}/>
+      </div>
     </div>
   )
 }

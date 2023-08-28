@@ -5,7 +5,7 @@ export const test = async () => {
   return response.data;
 }
 
-export const login = async (credentials: { username: string, password: string }) => {
+export const login = async (credentials: { email: string, password: string }) => {
   const response = await apiInstance.post('/api/auth/login', credentials);
   return response.data;
 }
