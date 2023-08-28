@@ -13,17 +13,31 @@ const SignupForm: React.FC = () => {
     password: undefined,
     confirmPassword: undefined
   });
-  const [error, setErrors] = useState([])
+  const [errors, setErrors] = useState<string[]>([])
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log('handle sign up', form);
+    setErrors([]);
 
     try {
       const response = await signup(form);
       if (response.success) {
         window.localStorage.setItem('accessToken', response.token.accessToken);
         navigate('/account');
+      }
+      if (response.error) {
+        console.log(response.error);
+        const newErrors = [];
+        for (let i = 0; i < response.error.length; i++) {
+          const message = response.error[i].msg;
+          console.log('message', message);
+          newErrors.push(message);
+        }
+        
+        console.log('new errors', newErrors);
+        setErrors(newErrors);
+        console.log('errors', errors);
       }
     } catch (error) {
       console.error(error);
@@ -84,6 +98,9 @@ const SignupForm: React.FC = () => {
           />
           <button type="submit">sign up</button>
         </form>
+      </div>
+      <div>
+        {errors}
       </div>
       <div>
         <h2>Already a member?</h2>
