@@ -80,6 +80,6 @@ export async function remove(id) {
 // remove properties that should not be in the response
 export function sanitizeUserResponse(user: User): Partial<User> {
   delete user.password;
-  delete user.userId;
+  // delete user.userId;
   return user;
 }

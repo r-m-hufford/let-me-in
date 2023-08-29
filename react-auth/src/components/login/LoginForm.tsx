@@ -29,7 +29,7 @@ const LoginForm: React.FC = () => {
       }
     } catch (error: any) {
       // this can get moved to the auth api eventually
-      if (error.response && error.response.status == 400) {
+      if (error.response && error.response.status === 400) {
         setErrors(['invalid email or password'])
       } else {
         console.error('An error occurred: ', error);

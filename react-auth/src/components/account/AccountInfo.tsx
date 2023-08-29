@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { whoami } from "../../api/auth";
 import { User } from "../../interfaces/user";
 import LogoutButton from "../logout/LogoutButton";
+import { parseDate } from "../../utils/parseDate";
+import EditableField from "../common/editableField";
 
 const AccountInfo: React.FC = () => {
-  const [user, setUser] = useState<User | null >(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -16,14 +18,24 @@ const AccountInfo: React.FC = () => {
         console.error('error fetching user data: ', error);
       }
     };
-
     fetchUser();
   }, []);
 
   return (
     <div>
       <h1>This is the account page</h1>
-        {user ? (<p>{user.firstName}</p>) : <p>loading user jawn...</p>}
+        {user 
+        ? 
+        (
+        <>
+          <p>{user.firstName} {user.lastName}</p>
+          <p>{user.email}</p>
+          <p>Joined On: {parseDate(user.createdAt)}</p>
+          <EditableField value={`${user.firstName} ${user.lastName}`} type={"text"}/>
+        </>
+        ) 
+        : 
+        <p>loading user jawn...</p>}
       <LogoutButton />
     </div>
   )

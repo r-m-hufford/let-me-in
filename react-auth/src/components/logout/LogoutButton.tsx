@@ -18,7 +18,7 @@ const LogoutButton: React.FC = () => {
       } else {
         console.log('no user found in local storage');
       }
-      navigate('/login');
+      navigate('/');
     }
 
 
