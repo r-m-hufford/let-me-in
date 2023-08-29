@@ -1,9 +1,11 @@
 import express, { Request, Response } from 'express';
+import { body, validationResult } from 'express-validator';
 import { User } from '../models/user';
 import { myDataSource } from '../../app-data-source';
 import { generateTokens } from '../utils/jwt';
 import { getById, remove, sanitizeUserResponse, signup, update, whoami } from '../services/users';
 import { confirmNewPassword, hashPassword } from '../services/password';
+import { signupValidation, updateValidation } from '../../src/validators/user-validation';
 
 const userRepo = myDataSource.getRepository(User);
 
@@ -21,7 +23,13 @@ userRouter.get("/whoami", async (req: Request, res: Response) => {
   }
 })
   
-userRouter.post("/signup", async (req: Request, res: Response) => {
+userRouter.post("/signup", signupValidation() ,async (req: Request, res: Response) => {
+  const validationErrors = validationResult(req);
+  console.log('validation: ', validationErrors);
+  if (!validationErrors.isEmpty()) {
+    return res.json({ error: validationErrors.array() });
+  }
+  
   try {
     if (!confirmNewPassword(req.body)) return res.status(401).json({ error: 'passwords do not match' })
 
@@ -41,7 +49,7 @@ userRouter.post("/signup", async (req: Request, res: Response) => {
   }
 })
 
-userRouter.put("/:id", async (req: Request, res: Response) => {
+userRouter.put("/:id", updateValidation, async (req: Request, res: Response) => {
   try {
     await update(req.params.id, req.body);
 
