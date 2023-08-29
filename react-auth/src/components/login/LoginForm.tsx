@@ -11,7 +11,13 @@ const LoginForm: React.FC = () => {
     email: '',
     password: ''
   });
-  const [errorMessage, setErrorMessage] = useState('');
+  
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const handleFormChange = (e: ChangeEvent<HTMLInputElement>, setData: Function) => {
+    handleInputChange(e, setForm);
+    setErrors([]);
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +30,7 @@ const LoginForm: React.FC = () => {
     } catch (error: any) {
       // this can get moved to the auth api eventually
       if (error.response && error.response.status == 400) {
-        setErrorMessage('invalid email or password')
+        setErrors(['invalid email or password'])
       } else {
         console.error('An error occurred: ', error);
       }
@@ -43,7 +49,7 @@ const LoginForm: React.FC = () => {
             name='email'
             id='email'
             value={form.email}
-            onChange={(e) => handleInputChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm)}
           />
           <label htmlFor='password'>Password:</label>
           <input
@@ -51,9 +57,9 @@ const LoginForm: React.FC = () => {
             name='password'
             id='password'
             value={form.password}
-            onChange={(e) => handleInputChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm)}
           />
-          {errorMessage && <p>{errorMessage}</p>}
+          {errors && <p>{errors}</p>}
           <button type="submit">Login</button>
         </form>
       </div>

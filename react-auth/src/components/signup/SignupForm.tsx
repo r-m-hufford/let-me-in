@@ -15,9 +15,23 @@ const SignupForm: React.FC = () => {
   });
   const [errors, setErrors] = useState<string[]>([])
 
+  const handleFormChange = (e: ChangeEvent<HTMLInputElement>, setData: Function) => {
+    handleInputChange(e, setForm);
+    setErrors([]);
+  }
+
+  const resetForm = () => {
+    setForm((prevData) => ({
+      email: undefined,
+      firstName: undefined,
+      lastName: undefined,
+      password: undefined,
+      confirmPassword: undefined
+    }));
+  }
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('handle sign up', form);
     setErrors([]);
 
     try {
@@ -27,28 +41,17 @@ const SignupForm: React.FC = () => {
         navigate('/account');
       }
       if (response.error) {
-        console.log(response.error);
         const newErrors = [];
         for (let i = 0; i < response.error.length; i++) {
           const message = response.error[i].msg;
-          console.log('message', message);
           newErrors.push(message);
         }
-        
-        console.log('new errors', newErrors);
         setErrors(newErrors);
-        console.log('errors', errors);
       }
     } catch (error) {
       console.error(error);
     }
-    setForm((prevData) => ({
-      email: undefined,
-      firstName: undefined,
-      lastName: undefined,
-      password: undefined,
-      confirmPassword: undefined
-    }));
+    resetForm();
   }
 
   return (
@@ -62,7 +65,7 @@ const SignupForm: React.FC = () => {
             name='firstName'
             id='firstName'
             value={form.firstName}
-            onChange={(e) => handleInputChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm)}
           />
           <label htmlFor='lastName'>lastName</label>
           <input
@@ -70,7 +73,7 @@ const SignupForm: React.FC = () => {
             name='lastName'
             id='lastName'
             value={form.lastName}
-            onChange={(e) => handleInputChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm)}
           />
           <label htmlFor='email'>Email</label>
           <input
@@ -100,11 +103,11 @@ const SignupForm: React.FC = () => {
         </form>
       </div>
       <div>
-        {errors}
+        {errors && <p>{errors}</p>}
       </div>
       <div>
         <h2>Already a member?</h2>
-        <LinkToButton path={'/login'} label={'login'}/>
+        <LinkToButton path={'/'} label={'login'}/>
       </div>
     </div>
   )
