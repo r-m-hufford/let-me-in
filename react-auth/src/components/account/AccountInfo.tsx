@@ -28,10 +28,13 @@ const AccountInfo: React.FC = () => {
         ? 
         (
         <>
-          <p>{user.firstName} {user.lastName}</p>
-          <p>{user.email}</p>
+          <p>first name:</p>
+          <EditableField initialData={`${user.firstName}`} type={"text"} name={"firstName"}/>
+          <p>last name:</p>
+          <EditableField initialData={`${user.lastName}`} type={"text"} name={"lastName"}/>
+          <p>email:</p>
+          <EditableField initialData={`${user.email}`} type={"text"} name={"email"}/>
           <p>Joined On: {parseDate(user.createdAt)}</p>
-          <EditableField value={`${user.firstName} ${user.lastName}`} type={"text"} name={"lastName"}/>
         </>
         ) 
         : 

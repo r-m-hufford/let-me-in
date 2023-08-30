@@ -3,38 +3,50 @@ import { updateUser, whoami } from "../../api/auth";
 import { handleInputChange } from "../../utils/inputChange";
 
 interface EditableFieldProps {
-  value: string;
+  initialData: string;
   type: string;
   name: string;
 }
 
-const EditableField: React.FC<EditableFieldProps> = ({ value, type, name }) => {
+const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }) => {
   const [editing, setEditing] = useState(false);
-  const [input, setInput] = useState<string>('');
+  const [saving, setSaving] = useState(false);
+  const [data, setData] = useState<string>(initialData);
 
   const toggleEditState = () => {
     setEditing(!editing);
   }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
+    setData(e.target.value);
   }
 
   const handleUpdate = async () => {
-    const response = await updateUser({[name]: input});
-    console.log({ response });
-    await whoami();
+    setSaving(true);
+    const response = await updateUser({[name]: data});
+    setData(response[name]);
+    setSaving(false);
+    setEditing(false);
   }
+  
+  useEffect(() => {
+    const fetchUser = async () => {
+      console.log('useEffect')
+      await whoami();
+    }
+    fetchUser();
+  }, [data])
+
   return (
     <div>
       { editing ? 
       <>
-        <input type={type} name={name} id={name} placeholder={value} onChange={handleInputChange}/>
-        <button type="button" onClick={handleUpdate}>save</button>
+        <input type={type} name={name} id={name} placeholder={data} onChange={handleInputChange}/>
+        <button type="button" onClick={handleUpdate}>{saving ? 'Saving...' : 'save'}</button>
         <button type="button" onClick={toggleEditState}>cancel</button>
       </>
       :
-      <p>{value} <button type="button" onClick={toggleEditState}>edit</button></p> 
+      <p>{data} <button type="button" onClick={toggleEditState}>edit</button></p> 
       }
     </div>
   )
