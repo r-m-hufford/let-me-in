@@ -4,7 +4,11 @@ import { resetPassword } from "../../api/auth";
 import { error } from "console";
 
 const ChangePassword: React.FC = () => {
-  const [form, setForm] = useState({})
+  const [form, setForm] = useState({
+    currentPassword: '',
+    password: '',
+    confirmPassword: ''
+  })
   const [errors, setErrors] = useState('');
 
   const handleFormChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -16,14 +20,18 @@ const ChangePassword: React.FC = () => {
     try {
       const response = await resetPassword(form);
       if (response.success) {
-        return 'cool';
+        console.log('cool');
       }
-      // set errors here
-      if (response.error) {
-        console.log(response);
-        // setErrors(error);
+    } catch (error: any) {
+      if (error.response) {
+        console.error();
+        setErrors(error.response.data.error);
+        setForm({
+          currentPassword: '',
+          password: '',
+          confirmPassword: ''
+        });
       }
-    } catch (error) {
       console.error(error);
     }
   }
@@ -43,8 +51,9 @@ const ChangePassword: React.FC = () => {
         <label htmlFor="confirmPassword">confirm new password</label>
         <input type="password" name="confirmPassword" id="confirmPassword" onChange={e  => {handleFormChange(e)}}/>
         <br />
-        <button type="submit">execute total password chornge</button>
+        <button type="submit">change password</button>
       </form>
+      {errors}
     </div>
   );
 }

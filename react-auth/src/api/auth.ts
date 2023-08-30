@@ -31,7 +31,7 @@ export const updateUser = async (userData: Partial<User>) => {
   return response.data
 }
 
-export const resetPassword = async (passwordResetRequest: any) => {
+export const resetPassword = async (passwordResetRequest: PasswordResetRequest) => {
   const response = await apiInstance.post('api/password/reset', passwordResetRequest);
   return response.data;
 }
