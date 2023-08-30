@@ -6,26 +6,20 @@ export const passwordRouter = express.Router();
 
 passwordRouter.post('/reset', async (req, res) => {
   try {
-    // check old password 
+    // check old password via normal login flow (can abstract that bit)
     const user = await getByUserCode(req.body.userCode);
-    console.log(1)
     if (!user) return res.status(404).json({ message: 'user not found' });
-    console.log(2)
     if (!validatePassword(req.body.currentPassword, user)) return res.status(401).json({ message: 'something went wrong' })
-    console.log(3)
 
     // make sure new passwords match
     if (!confirmNewPassword(req.body)) return res.status(401).json({ message: 'passwords do not match' })
-    console.log(4)
   
-  // hash new password and update
-  req.body.password = await hashPassword(req.body.password);
-  console.log(5)
-  delete req.body.currentPassword;
-  delete req.body.confirmPassword;
+    // hash new password and update
+    req.body.password = await hashPassword(req.body.password);
+    delete req.body.currentPassword;
+    delete req.body.confirmPassword;
 
-  await update(req.body);
-  console.log(6)
+    await update(req.body);
     
     //confirm that the new password matches
     const updatedUser = await getByUserCode(req.body.userCode);
@@ -36,11 +30,4 @@ passwordRouter.post('/reset', async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'internal server error' });
   }
-  // make sure passwords match
-  // find the user
-
-  // hash new passwords etc
-  //update password on user record
-
-  // return success or failure
 })

@@ -1,6 +1,6 @@
 import apiInstance from './apiConfig';
 import { User } from '../interfaces/user';
-
+import { PasswordResetRequest } from '../interfaces/requests';
 export const test = async () => {
   const response = await apiInstance.get('/api/test');
   return response.data;
@@ -29,4 +29,8 @@ export const whoami = async () => {
 export const updateUser = async (userData: Partial<User>) => {
   const response = await apiInstance.put(`api/users`, userData)
   return response.data
+}
+
+export const resetPassword = async (passwordResetRequest: any) => {
+  const response = await apiInstance.post('api/password/reset', passwordResetRequest);
 }
