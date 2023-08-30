@@ -1,5 +1,5 @@
 import React, { useState, useEffect, InputHTMLAttributes, ChangeEvent } from "react";
-import { updateUser } from "../../api/auth";
+import { updateUser, whoami } from "../../api/auth";
 import { handleInputChange } from "../../utils/inputChange";
 
 interface EditableFieldProps {
@@ -19,10 +19,11 @@ const EditableField: React.FC<EditableFieldProps> = ({ value, type, name }) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   }
+
   const handleUpdate = async () => {
-    // track the inputs and send that form onClick
-    const response = await updateUser({lastName: input});
+    const response = await updateUser({[name]: input});
     console.log({ response });
+    await whoami(window.localStorage.getItem('userEmail'));
   }
   return (
     <div>

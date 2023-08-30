@@ -13,7 +13,7 @@ const SignupForm: React.FC = () => {
     password: undefined,
     confirmPassword: undefined
   });
-  const [errors, setErrors] = useState<string[]>([])
+  const [errors, setErrors] = useState<string[]>([]);
 
   const handleFormChange = (e: ChangeEvent<HTMLInputElement>, setData: Function) => {
     handleInputChange(e, setForm);
