@@ -81,7 +81,7 @@ const SignupForm: React.FC = () => {
             name='email'
             id='email'
             value={form.email}
-            onChange={(e) => handleInputChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm)}
           />
           <label htmlFor='password'>password</label>
           <input
@@ -89,7 +89,7 @@ const SignupForm: React.FC = () => {
             name='password'
             id='password'
             value={form.password}
-            onChange={(e) => handleInputChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm)}
           />
           <label htmlFor='confirmPassword'>confirmPassword</label>
           <input
@@ -97,7 +97,7 @@ const SignupForm: React.FC = () => {
             name='confirmPassword'
             id='confirmPassword'
             value={form.confirmPassword}
-            onChange={(e) => handleInputChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm)}
           />
           <button type="submit">sign up</button>
         </form>

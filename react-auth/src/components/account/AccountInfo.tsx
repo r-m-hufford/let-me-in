@@ -3,7 +3,7 @@ import { whoami } from "../../api/auth";
 import { User } from "../../interfaces/user";
 import LogoutButton from "../logout/LogoutButton";
 import { parseDate } from "../../utils/parseDate";
-import EditableField from "../common/editableField";
+import EditableField from "../common/EditableField";
 
 const AccountInfo: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -31,7 +31,7 @@ const AccountInfo: React.FC = () => {
           <p>{user.firstName} {user.lastName}</p>
           <p>{user.email}</p>
           <p>Joined On: {parseDate(user.createdAt)}</p>
-          <EditableField value={`${user.firstName} ${user.lastName}`} type={"text"}/>
+          <EditableField value={`${user.firstName} ${user.lastName}`} type={"text"} name={"lastName"}/>
         </>
         ) 
         : 

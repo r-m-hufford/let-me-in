@@ -1,4 +1,4 @@
-import { whoami, getByEmail, getById, signup, update, remove, sanitizeUserResponse, userRepo } from "../../src/services/users";
+import { whoami, getByEmail, getByUserCode, signup, update, remove, sanitizeUserResponse, userRepo } from "../../src/services/users";
 import { User } from "../../src/models/user";
 import { getTestNewUser, getTestSanitizedUser, getTestUser } from "../test-helpers/users";
 
@@ -68,7 +68,7 @@ describe('get by id', () => {
     
     userRepo.findOne = jest.fn().mockResolvedValue(user);
   
-    const result = await getById(userId);
+    const result = await getByUserCode(userId);
   
     expect(result).toBeDefined();
     expect(result).toEqual(user);
@@ -83,7 +83,7 @@ describe('get by id', () => {
 
     userRepo.findOne = jest.fn().mockRejectedValue(searchError);
 
-    await expect(getById(user)).rejects.toThrow(searchError);
+    await expect(getByUserCode(user)).rejects.toThrow(searchError);
   })
 })
 

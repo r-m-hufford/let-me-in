@@ -3,7 +3,7 @@ import { body, validationResult } from 'express-validator';
 import { User } from '../models/user';
 import { myDataSource } from '../../app-data-source';
 import { generateTokens } from '../utils/jwt';
-import { getById, remove, sanitizeUserResponse, signup, update, whoami } from '../services/users';
+import { getByUserCode, remove, sanitizeUserResponse, signup, update, whoami } from '../services/users';
 import { confirmNewPassword, hashPassword } from '../services/password';
 import { signupValidation, updateValidation } from '../../src/validators/user-validation';
 
@@ -49,11 +49,11 @@ userRouter.post("/signup", signupValidation() ,async (req: Request, res: Respons
   }
 })
 
-userRouter.put("/:id", updateValidation, async (req: Request, res: Response) => {
+userRouter.put("/", updateValidation(), async (req: Request, res: Response) => {
   try {
-    await update(req.params.id, req.body);
+    await update(req.body.userCode, req.body);
 
-    const user = await getById(req.params.id);
+    const user = await getByUserCode(req.body.userCode);
     if (!user) return res.status(404).json({ message: 'user not found' });
 
     res.status(200).json(user);

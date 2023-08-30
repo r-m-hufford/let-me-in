@@ -29,11 +29,11 @@ export const whoami = async (userEmail: any) => {
 export const updateUser = async (userData: Partial<User>) => {
   // get the userId
   // make this a util
-  let user;
-  const rawUser = window.localStorage.getItem('user');
-  if (rawUser) user = JSON.parse(rawUser);
-  console.log(user.userId);
+  // let user;
+  // const rawUser = window.localStorage.getItem('user');
+  // if (rawUser) user = JSON.parse(rawUser);
+  // console.log(user.userId);
   // concat it into the url
-  const response = await apiInstance.put(`api/users/${user.userId}`, userData)
+  const response = await apiInstance.put(`api/users`, userData)
   return response.data
 }
