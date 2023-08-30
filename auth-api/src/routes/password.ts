@@ -8,11 +8,13 @@ passwordRouter.post('/reset', async (req, res) => {
   try {
     // check old password via normal login flow (can abstract that bit)
     const user = await getByUserCode(req.body.userCode);
-    if (!user) return res.status(404).json({ message: 'user not found' });
-    if (!validatePassword(req.body.currentPassword, user)) return res.status(401).json({ message: 'something went wrong' })
+    if (!user) return res.status(404).json({ error: 'user not found' });
+
+    const validatedPassword = await validatePassword(req.body.currentPassword, user);
+    if (!validatedPassword) return res.status(401).json({ error: 'something went wrong' })
 
     // make sure new passwords match
-    if (!confirmNewPassword(req.body)) return res.status(401).json({ message: 'passwords do not match' })
+    if (!confirmNewPassword(req.body)) return res.status(401).json({ error: 'passwords do not match' })
   
     // hash new password and update
     req.body.password = await hashPassword(req.body.password);
@@ -23,7 +25,7 @@ passwordRouter.post('/reset', async (req, res) => {
     
     //confirm that the new password matches
     const updatedUser = await getByUserCode(req.body.userCode);
-    if (!validatePassword(req.body.password, updatedUser)) return res.status(401).json({ message: 'something went wrong' })
+    if (!validatePassword(req.body.password, updatedUser)) return res.status(401).json({ error: 'something went wrong' })
     
     return res.status(200).json({ success: true })
   } catch (error) {
