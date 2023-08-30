@@ -9,22 +9,26 @@ const ChangePassword: React.FC = () => {
     password: '',
     confirmPassword: ''
   })
-  const [errors, setErrors] = useState('');
+  const [errors, setErrors] = useState<string[]>([]);
 
   const handleFormChange = (e: ChangeEvent<HTMLInputElement>) => {
     handleInputChange(e, setForm);
-    setErrors('');
+    setErrors([]);
   }
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await resetPassword(form);
-      if (response.success) {
-        console.log('cool');
+      if (response.error) {
+        const newErrors = [];
+        for (let i = 0; i < response.error.length; i++) {
+          const message = response.error[i].msg;
+          newErrors.push(message);
+        }
+        setErrors(newErrors);
       }
     } catch (error: any) {
       if (error.response) {
-        console.error();
         setErrors(error.response.data.error);
         setForm({
           currentPassword: '',
@@ -38,7 +42,6 @@ const ChangePassword: React.FC = () => {
 
   return (
     <div>
-      <p>Woah, we gotta reset password component here</p>
       <form onSubmit={handlePasswordChange}>
         <label htmlFor="currentPassword">current password</label>
         <input type="password" name="currentPassword" id="currentPassword" onChange={e  => {handleFormChange(e)}}/>

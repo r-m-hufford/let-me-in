@@ -21,7 +21,6 @@ userRouter.get("/whoami", async (req: Request, res: Response) => {
   
 userRouter.post("/signup", signupValidation() ,async (req: Request, res: Response) => {
   const validationErrors = validationResult(req);
-  console.log('validation: ', validationErrors);
   if (!validationErrors.isEmpty()) {
     return res.json({ error: validationErrors.array() });
   }

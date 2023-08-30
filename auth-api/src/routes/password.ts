@@ -1,10 +1,16 @@
 import express, {Request, Response} from "express";
 import { confirmNewPassword, hashPassword, validatePassword } from "../../src/services/password";
 import { getByUserCode, update } from "../../src/services/users";
+import { passwordResetValidation } from "../../src/validators/password-validation";
+import { validationResult } from "express-validator";
 
 export const passwordRouter = express.Router();
 
-passwordRouter.post('/reset', async (req, res) => {
+passwordRouter.post('/reset', passwordResetValidation(), async (req, res) => {
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    return res.json({ error: validationErrors.array() });
+  }
   try {
     // check old password via normal login flow (can abstract that bit)
     const user = await getByUserCode(req.body.userCode);
