@@ -59,9 +59,9 @@ export async function signup(reqBody): Promise<User> {
   }
 }
 
-export async function update(userCode, reqBody) {
+export async function update(reqBody) {
   try {
-    return await userRepo.update({ userCode: userCode }, reqBody);
+    return await userRepo.update({ userCode: reqBody.userCode }, reqBody);
   } catch (error) {
     console.error(error);
     throw error;

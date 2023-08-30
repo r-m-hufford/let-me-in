@@ -17,7 +17,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
     const user = await getByEmail(req.body);
     if (!user) return res.status(400).json({ error: 'Invalid email or password' })
     
-    const validatedPassword = await validatePassword(req.body, user);
+    const validatedPassword = await validatePassword(req.body.password, user);
     if (!validatedPassword) return res.status(400).json({ error: 'Invalid email or password' })
  
     const token = generateTokens(user);

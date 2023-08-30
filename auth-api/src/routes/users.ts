@@ -1,13 +1,9 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import { User } from '../models/user';
-import { myDataSource } from '../../app-data-source';
 import { generateTokens } from '../utils/jwt';
 import { getByUserCode, remove, sanitizeUserResponse, signup, update, whoami } from '../services/users';
 import { confirmNewPassword, hashPassword } from '../services/password';
 import { signupValidation, updateValidation } from '../../src/validators/user-validation';
-
-const userRepo = myDataSource.getRepository(User);
 
 export const userRouter = express.Router();
 
@@ -51,7 +47,7 @@ userRouter.post("/signup", signupValidation() ,async (req: Request, res: Respons
 
 userRouter.put("/", updateValidation(), async (req: Request, res: Response) => {
   try {
-    await update(req.body.userCode, req.body);
+    await update(req.body);
 
     const user = await getByUserCode(req.body.userCode);
     if (!user) return res.status(404).json({ message: 'user not found' });
