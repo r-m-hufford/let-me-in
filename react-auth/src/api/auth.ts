@@ -16,13 +16,13 @@ export const signup = async (userData: Partial<User>) => {
   return response.data;
 }
 
-export const invalidateToken = async (token: string) => {
+export const invalidateToken = async () => {
   const response = await apiInstance.post('/api/invalidatetokens');
   return response.data;
 }
 
-export const whoami = async (userEmail: any) => {
-  const response = await apiInstance.get('/api/users/whoami', userEmail)
+export const whoami = async () => {
+  const response = await apiInstance.get('/api/users/whoami')
   return response.data;
 }
 

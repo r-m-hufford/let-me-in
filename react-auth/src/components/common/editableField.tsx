@@ -23,7 +23,7 @@ const EditableField: React.FC<EditableFieldProps> = ({ value, type, name }) => {
   const handleUpdate = async () => {
     const response = await updateUser({[name]: input});
     console.log({ response });
-    await whoami(window.localStorage.getItem('userEmail'));
+    await whoami();
   }
   return (
     <div>
