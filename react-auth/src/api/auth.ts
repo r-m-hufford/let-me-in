@@ -1,5 +1,6 @@
 import apiInstance from './apiConfig';
-
+import { User } from '../interfaces/user';
+import { PasswordResetRequest } from '../interfaces/requests';
 export const test = async () => {
   const response = await apiInstance.get('/api/test');
   return response.data;
@@ -10,17 +11,27 @@ export const login = async (credentials: { email: string, password: string }) =>
   return response.data;
 }
 
-export const signup = async (userData: any) => {
+export const signup = async (userData: Partial<User>) => {
   const response = await apiInstance.post('/api/users/signup', userData);
   return response.data;
 }
 
-export const invalidateToken = async (token: string) => {
+export const invalidateToken = async () => {
   const response = await apiInstance.post('/api/invalidatetokens');
   return response.data;
 }
 
-export const whoami = async (userEmail: any) => {
-  const response = await apiInstance.get('/api/users/whoami', userEmail)
+export const whoami = async () => {
+  const response = await apiInstance.get('/api/users/whoami')
+  return response.data;
+}
+
+export const updateUser = async (userData: Partial<User>) => {
+  const response = await apiInstance.put(`api/users`, userData)
+  return response.data
+}
+
+export const resetPassword = async (passwordResetRequest: PasswordResetRequest) => {
+  const response = await apiInstance.post('api/password/reset', passwordResetRequest);
   return response.data;
 }

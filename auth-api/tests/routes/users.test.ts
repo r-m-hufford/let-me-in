@@ -2,7 +2,7 @@ import request from "supertest";
 import express, { Request, Response, response } from 'express';
 import { userRouter } from "../../src/routes/users";
 import { getTestSanitizedUser, getTestUser } from "../test-helpers/users";
-import { sanitizeUserResponse, signup, whoami, update, getById, remove } from "../../src/services/users";
+import { sanitizeUserResponse, signup, whoami, update, getByUserCode, remove } from "../../src/services/users";
 import { generateTokens } from "../../src/utils/jwt";
 import { confirmNewPassword } from "../../src/services/password";
 
@@ -11,7 +11,7 @@ jest.mock('../../src/services/users', () => ({
   sanitizeUserResponse: jest.fn(),
   signup: jest.fn(),
   update: jest.fn(),
-  getById: jest.fn(),
+  getByUserCode: jest.fn(),
   remove: jest.fn()
 }));
 
@@ -124,13 +124,13 @@ describe('PUT /user/update', () => {
     const user = getTestUser();
     
     (update as jest.Mock).mockResolvedValue(user);
-    (getById as jest.Mock).mockResolvedValue(user.userId);
+    (getByUserCode as jest.Mock).mockResolvedValue(user.userId);
     
     const response = await request(app).put('/user/update');
 
     expect(response.status).toBe(200);
     expect(update).toHaveBeenCalled();
-    expect(getById).toHaveBeenCalled();
+    expect(getByUserCode).toHaveBeenCalled();
   });
 
   // user not found
@@ -138,7 +138,7 @@ describe('PUT /user/update', () => {
     const user = getTestUser();
 
     (update as jest.Mock).mockResolvedValue(user);
-    (getById as jest.Mock).mockResolvedValue(null);
+    (getByUserCode as jest.Mock).mockResolvedValue(null);
 
     const response = await request(app).put('/user/update');
 
@@ -150,7 +150,7 @@ describe('PUT /user/update', () => {
   it('should handle internal server error', async () => {
     const user = getTestUser();
     (update as jest.Mock).mockRejectedValue(new Error('Test error'));
-    (getById as jest.Mock).mockResolvedValue(user);
+    (getByUserCode as jest.Mock).mockResolvedValue(user);
 
     const response = await request(app).put('/user/update');
 

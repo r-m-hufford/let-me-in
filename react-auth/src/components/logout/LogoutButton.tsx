@@ -7,7 +7,7 @@ const LogoutButton: React.FC = () => {
   const handleLogout = async () => {
       const token = window.localStorage.getItem('accessToken');
       if (token) {
-        await invalidateToken(token);
+        await invalidateToken();
         window.localStorage.removeItem('accessToken');
       } else {
         console.log('no token found in local storage');
@@ -18,7 +18,7 @@ const LogoutButton: React.FC = () => {
       } else {
         console.log('no user found in local storage');
       }
-      navigate('/login');
+      navigate('/');
     }
 
 

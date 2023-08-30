@@ -30,11 +30,11 @@ export async function getByEmail(reqBody): Promise<User> {
   }
 }
 
-export async function getById(id): Promise<User> {
+export async function getByUserCode(userCode): Promise<User> {
   try {
     return await userRepo.findOne({ 
        where: {
-         userId: id
+         userCode: userCode
        }
       });
   } catch (error) {
@@ -59,9 +59,9 @@ export async function signup(reqBody): Promise<User> {
   }
 }
 
-export async function update(id, reqBody) {
+export async function update(reqBody) {
   try {
-    return await userRepo.update(id, reqBody);
+    return await userRepo.update({ userCode: reqBody.userCode }, reqBody);
   } catch (error) {
     console.error(error);
     throw error;
@@ -80,6 +80,6 @@ export async function remove(id) {
 // remove properties that should not be in the response
 export function sanitizeUserResponse(user: User): Partial<User> {
   delete user.password;
-  delete user.userId;
+  // delete user.userId;
   return user;
 }
