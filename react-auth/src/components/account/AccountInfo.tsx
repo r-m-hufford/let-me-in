@@ -25,7 +25,6 @@ const AccountInfo: React.FC = () => {
 
   return (
     <div>
-      <h1>This is the account page</h1>
         {user 
         ? 
         (
