@@ -1,6 +1,10 @@
 import apiInstance from './apiConfig';
 import { User } from '../interfaces/user';
 import { PasswordResetRequest } from '../interfaces/requests';
+
+interface DeleteRequest {
+  password: string;
+}
 export const test = async () => {
   const response = await apiInstance.get('/api/test');
   return response.data;
@@ -33,5 +37,10 @@ export const updateUser = async (userData: Partial<User>) => {
 
 export const resetPassword = async (passwordResetRequest: PasswordResetRequest) => {
   const response = await apiInstance.post('api/password/reset', passwordResetRequest);
+  return response.data;
+}
+
+export const deleteAccount = async () => {
+  const response = await apiInstance.delete('api/users');
   return response.data;
 }

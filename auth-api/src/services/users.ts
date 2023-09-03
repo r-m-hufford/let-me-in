@@ -68,9 +68,9 @@ export async function update(reqBody) {
   }
 }
 
-export async function remove(id) {
+export async function remove(userCode) {
   try {
-    return await userRepo.delete(id);
+    return await userRepo.delete({ userCode: userCode });
   } catch (error) {
     console.error(error);
     throw error;

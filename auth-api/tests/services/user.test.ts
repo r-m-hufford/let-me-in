@@ -124,7 +124,7 @@ describe('update a user', () => {
   
     userRepo.update = jest.fn().mockResolvedValue(updateResult);
   
-    const result = await update(user.userId, user);
+    const result = await update(user.userId);
 
     expect(result).toBeDefined();
     expect(result.affected).toBe(1);
@@ -136,7 +136,7 @@ describe('update a user', () => {
 
     userRepo.update = jest.fn().mockRejectedValue(updateError);
 
-    await expect(update(user.userId, user)).rejects.toThrow(updateError);
+    await expect(update(user.userId)).rejects.toThrow(updateError);
   })
 })
 
