@@ -2,8 +2,9 @@ import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { generateTokens } from '../utils/jwt';
 import { getByUserCode, remove, sanitizeUserResponse, signup, update, whoami } from '../services/users';
-import { confirmNewPassword, hashPassword } from '../services/password';
+import { confirmNewPassword, hashPassword, validatePassword } from '../services/password';
 import { signupValidation, updateValidation } from '../../src/validators/user-validation';
+import { myDataSource } from '../../app-data-source';
 
 export const userRouter = express.Router();
 
@@ -58,10 +59,23 @@ userRouter.put("/", updateValidation(), async (req: Request, res: Response) => {
   }
 })
 
-userRouter.delete("/:id", async (req: Request, res: Response) => {
+userRouter.delete("/", async (req: Request, res: Response) => {
   try {
-    const user = await remove(req.params.id);
-    res.status(200).json(user);
+    const user = await getByUserCode(req.body.userCode);
+    if (!user) return res.status(400).json({ error: 'user not found' })
+    
+    // const validatedPassword = await validatePassword(req.body.password, user);
+    // if (!validatedPassword) return res.status(400).json({ error: 'Invalid email or password' });
+
+    const roles = await myDataSource
+    .createQueryBuilder()
+    .delete()
+    .from('user_role')
+    .where("user_id = :user_id", { user_id: user.userId })
+    .execute();
+    
+    const deletedUser = await remove(req.body.userCode);
+    res.status(200).json(deletedUser);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'internal server error' });

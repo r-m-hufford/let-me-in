@@ -4,7 +4,8 @@ import { User } from "../../interfaces/user";
 import LogoutButton from "../logout/LogoutButton";
 import { parseDate } from "../../utils/parseDate";
 import EditableField from "../common/EditableField";
-import ChangePassword from "../common/ChangePassword";
+import ChangePassword from "./ChangePassword";
+import DeleteAccount from "./DeleteAccount";
 
 const AccountInfo: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -40,10 +41,14 @@ const AccountInfo: React.FC = () => {
           <hr />
           <h2>change password</h2>
           <ChangePassword />
+          <hr />
+          <h2>delete account</h2>
+          <DeleteAccount />
         </>
         ) 
         : 
         <p>loading user jawn...</p>}
+        <br />
       <LogoutButton />
     </div>
   )

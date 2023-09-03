@@ -35,3 +35,8 @@ export const resetPassword = async (passwordResetRequest: PasswordResetRequest) 
   const response = await apiInstance.post('api/password/reset', passwordResetRequest);
   return response.data;
 }
+
+export const deleteAccount = async () => {
+  const response = await apiInstance.delete('api/users');
+  return response.data;
+}
