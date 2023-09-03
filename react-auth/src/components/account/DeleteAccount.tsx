@@ -22,7 +22,6 @@ const DeleteAccount: React.FC = () => {
 
   return (
     <div>
-      <h2>delete your account</h2>
         <button type="submit" onClick={handleAccountDelete}>delete account</button>
       {errors}
     </div>
