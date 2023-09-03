@@ -62,10 +62,6 @@ userRouter.put("/", updateValidation(), async (req: Request, res: Response) => {
 userRouter.delete("/", async (req: Request, res: Response) => {
   try {
     const user = await getByUserCode(req.body.userCode);
-    if (!user) return res.status(400).json({ error: 'user not found' })
-    
-    // const validatedPassword = await validatePassword(req.body.password, user);
-    // if (!validatedPassword) return res.status(400).json({ error: 'Invalid email or password' });
 
     const roles = await myDataSource
     .createQueryBuilder()
