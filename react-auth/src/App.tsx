@@ -7,21 +7,27 @@ import PrivateRoute from './components/PrivateRoute';
 import Signup from './routes/Signup';
 import NotFound from './components/NotFound';
 import SiteHeader from './components/header/Header';
+import { AuthContext } from './context/AuthContext';
+import { useAuth } from './hooks/useAuth';
 
 const App: React.FC = () => {
+    const { user, login, logout, setUser } = useAuth();
+
   return (
-    <Router>
-      <SiteHeader />
-      <Routes>
-        <Route path='/' element={<Login />} />
-        <Route path='/signup' element={<Signup />}/>
-        <Route path='/account' element={
-        <PrivateRoute fallback={'/login'} >
-          <Account/>
-        </PrivateRoute>} />
-        <Route path='/*' element={<NotFound />}/>
-      </Routes>
-    </Router>
+    <AuthContext.Provider value={{user, setUser}} >
+      <Router>
+        <SiteHeader />
+        <Routes>
+          <Route path='/' element={<Login />} />
+          <Route path='/signup' element={<Signup />}/>
+          <Route path='/account' element={
+          <PrivateRoute fallback={'/login'} >
+            <Account/>
+          </PrivateRoute>} />
+          <Route path='/*' element={<NotFound />}/>
+        </Routes>
+      </Router>
+    </AuthContext.Provider>
   );
 };
 
