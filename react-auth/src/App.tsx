@@ -6,10 +6,12 @@ import Account from './routes/Account';
 import PrivateRoute from './components/PrivateRoute';
 import Signup from './routes/Signup';
 import NotFound from './components/NotFound';
+import SiteHeader from './components/header/Header';
 
 const App: React.FC = () => {
   return (
     <Router>
+      <SiteHeader />
       <Routes>
         <Route path='/' element={<Login />} />
         <Route path='/signup' element={<Signup />}/>

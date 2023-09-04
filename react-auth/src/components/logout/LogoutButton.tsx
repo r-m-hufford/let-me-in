@@ -10,13 +10,13 @@ const LogoutButton: React.FC = () => {
         await invalidateToken();
         window.localStorage.removeItem('accessToken');
       } else {
-        console.log('no token found in local storage');
+        console.error('no token found in local storage');
       }
       
       if (window.localStorage.getItem('user')) {
         window.localStorage.removeItem('user');
       } else {
-        console.log('no user found in local storage');
+        console.error('no user found in local storage');
       }
       navigate('/');
     }
