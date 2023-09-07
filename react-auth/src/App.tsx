@@ -11,10 +11,8 @@ import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
 
 const App: React.FC = () => {
-    const { user, login, logout, setUser } = useAuth();
 
   return (
-    <AuthContext.Provider value={{user, setUser}} >
       <Router>
         <SiteHeader />
         <Routes>
@@ -27,7 +25,6 @@ const App: React.FC = () => {
           <Route path='/*' element={<NotFound />}/>
         </Routes>
       </Router>
-    </AuthContext.Provider>
   );
 };
 

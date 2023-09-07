@@ -1,66 +1,62 @@
-import { createContext } from "react";
-import { User } from "../interfaces/user";
+//! Simple implementation to get the context working
+// import { createContext } from "react";
+// import { User } from "../interfaces/user";
 
-interface AuthContext {
+// interface AuthContext {
+//   user: User | null;
+//   setUser: (user: User | null) => void;
+// }
+
+// export const AuthContext = createContext<AuthContext>({
+//   user: null,
+//   setUser: () => {}
+// })
+
+/**
+ * all-in-one version: this can be broken out
+ * into an hooks and a context
+ */
+import { User } from '../interfaces/user';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+
+// Define the type for the authentication context
+interface AuthContextType {
   user: User | null;
-  setUser: (user: User | null) => void;
+  login: (user: User) => void;
+  logout: () => void;
 }
 
-export const AuthContext = createContext<AuthContext>({
-  user: null,
-  setUser: () => {}
-})
+// Create the authentication context
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-//! First Draft - this will be valid once I want to fold back in JWT etc
-// import React, { createContext, useContext, useState, ReactNode } from 'react';
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
 
-// // Define the type for the user data
-// interface UserData {
-//   // Define the properties of your user data here
-//   // For example:
-//   id: number;
-//   username: string;
-//   // ...
-// }
+interface AuthProviderProps {
+  children: ReactNode;
+}
 
-// // Define the type for the authentication context
-// interface AuthContextType {
-//   user: UserData | null;
-//   login: (userData: UserData) => void;
-//   logout: () => void;
-// }
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<User | null>(null);
 
-// // Create the authentication context
-// const AuthContext = createContext<AuthContextType | undefined>(undefined);
+  const login = (user: User) => {
+    // Perform login logic here
+    setUser(user);
+  };
 
-// export function useAuth() {
-//   const context = useContext(AuthContext);
-//   if (!context) {
-//     throw new Error('useAuth must be used within an AuthProvider');
-//   }
-//   return context;
-// }
+  const logout = () => {
+    // Perform logout logic here
+    setUser(null);
+  };
 
-// interface AuthProviderProps {
-//   children: ReactNode;
-// }
-
-// export function AuthProvider({ children }: AuthProviderProps) {
-//   const [user, setUser] = useState<UserData | null>(null);
-
-//   const login = (userData: UserData) => {
-//     // Perform login logic here
-//     setUser(userData);
-//   };
-
-//   const logout = () => {
-//     // Perform logout logic here
-//     setUser(null);
-//   };
-
-//   return (
-//     <AuthContext.Provider value={{ user, login, logout }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// }
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
