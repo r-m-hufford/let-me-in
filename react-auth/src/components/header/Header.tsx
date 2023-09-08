@@ -1,23 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import LogoutButton from "../logout/LogoutButton";
 import { useAuth } from "../../context/AuthContext";
 
 const SiteHeader: React.FC = () => {
-  const { user, logout } = useAuth();
-  // const [loggedIn, setLoggedIn] = useState(false);
+  const { user } = useAuth();
   const divStyle = {
     display: 'flex'
   };
-
-  // const checkLoginStatus = () => {
-  //   const userFound = window.localStorage.getItem('accessToken');
-  //   console.log('userFound: ', userFound);
-  //   setLoggedIn(!!userFound);
-  // }
-
-  // useEffect(() => {
-  //   checkLoginStatus()
-  // }, []);
 
   return (
     <div style={divStyle}>

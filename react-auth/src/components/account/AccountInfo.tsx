@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { whoami } from "../../api/auth";
-import { User } from "../../interfaces/user";
-import LogoutButton from "../logout/LogoutButton";
+import React from "react";
 import { parseDate } from "../../utils/parseDate";
 import EditableField from "../common/EditableField";
 import ChangePassword from "./ChangePassword";
@@ -9,21 +6,7 @@ import DeleteAccount from "./DeleteAccount";
 import { useAuth } from "../../context/AuthContext";
 
 const AccountInfo: React.FC = () => {
-  const { user, logout } = useAuth();
-  // const [dumbuser, setUser] = useState<User | null>(null);
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const response = await whoami();
-  //       setUser(response);
-  //       window.localStorage.setItem('user', JSON.stringify(response));
-  //     } catch (error) {
-  //       console.error('error fetching user data: ', error);
-  //     }
-  //   };
-  //   fetchUser();
-  // }, []);
+  const { user } = useAuth();
 
   return (
     <div>

@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useState } from 'react';
-// import { login } from '../../api/auth';
 import { useNavigate } from 'react-router-dom';
 import { handleInputChange } from '../../utils/inputChange';
 import LinkToButton from '../common/LinkToButton';
@@ -27,7 +26,6 @@ const LoginForm: React.FC = () => {
       const response = await login(form);
       if (response.success) navigate('/account');
     } catch (error: any) {
-      // this can get moved to the auth api eventually
       if (error.response && error.response.status === 400) {
         setErrors(['invalid email or password'])
       } else {

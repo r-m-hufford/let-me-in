@@ -35,7 +35,7 @@ const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }
       await whoami();
     }
     fetchUser();
-  }, [data])
+  }, [])
 
   return (
     <div>
