@@ -25,7 +25,7 @@ interface AuthContextType {
   user: User | null;
   login: (form: any) => any;
   logout: () => void;
-  update: () => void;
+  update: (form: any) => void;
 }
 
 // Create the authentication context
@@ -47,12 +47,13 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
 
-  const update = async () => {
+  const update = async (form: any) => {
     // send the form
-
+    const response = await updateUser(form);
     // form should return an up-to-date user
-
+    console.log('update resp: ', response);
     // setUser with updated user
+    setUser(response);
   }
   const login = async (form: any) => {
     console.log('auth context login: ', form);
