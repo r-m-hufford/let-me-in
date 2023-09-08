@@ -6,22 +6,24 @@ import { parseDate } from "../../utils/parseDate";
 import EditableField from "../common/EditableField";
 import ChangePassword from "./ChangePassword";
 import DeleteAccount from "./DeleteAccount";
+import { useAuth } from "../../context/AuthContext";
 
 const AccountInfo: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, logout } = useAuth();
+  // const [dumbuser, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await whoami();
-        setUser(response);
-        window.localStorage.setItem('user', JSON.stringify(response));
-      } catch (error) {
-        console.error('error fetching user data: ', error);
-      }
-    };
-    fetchUser();
-  }, []);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await whoami();
+  //       setUser(response);
+  //       window.localStorage.setItem('user', JSON.stringify(response));
+  //     } catch (error) {
+  //       console.error('error fetching user data: ', error);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, []);
 
   return (
     <div>
@@ -48,7 +50,6 @@ const AccountInfo: React.FC = () => {
         : 
         <p>loading user jawn...</p>}
         <br />
-      <LogoutButton />
     </div>
   )
 }

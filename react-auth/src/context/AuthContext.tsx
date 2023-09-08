@@ -52,6 +52,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if (response.success) {
           window.localStorage.setItem('accessToken', response.token.accessToken);
       }
+
+      const me = await whoami()
+      setUser(me);
       return response;
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
@@ -60,7 +63,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         console.error('An error occurred: ', error);
       }
     }
-    setUser(user);
   };
 
   const logout = () => {
