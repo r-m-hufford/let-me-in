@@ -7,8 +7,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Signup from './routes/Signup';
 import NotFound from './components/NotFound';
 import SiteHeader from './components/header/Header';
-import { AuthContext } from './context/AuthContext';
-import { useAuth } from './hooks/useAuth';
+import { AuthProvider } from './context/AuthContext';
 
 const App: React.FC = () => {
 
