@@ -21,6 +21,9 @@ const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }
     setData(e.target.value);
   }
 
+  //here is where a useUser hook will be helpful
+  //thus user related code does not end up in the
+  //useAuth hook or context. Dont optimize to early.
   const handleUpdate = async () => {
     setSaving(true);
     const response = await updateUser({[name]: data});

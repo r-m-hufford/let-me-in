@@ -18,13 +18,14 @@
  */
 import { User } from '../interfaces/user';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { login as loginReq, whoami, invalidateToken } from '../api/auth';
+import { login as loginReq, whoami, invalidateToken, updateUser } from '../api/auth';
 
 // Define the type for the authentication context
 interface AuthContextType {
   user: User | null;
   login: (form: any) => any;
   logout: () => void;
+  update: () => void;
 }
 
 // Create the authentication context
@@ -45,6 +46,14 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
+
+  const update = async () => {
+    // send the form
+
+    // form should return an up-to-date user
+
+    // setUser with updated user
+  }
   const login = async (form: any) => {
     console.log('auth context login: ', form);
     try {
@@ -65,13 +74,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const logout = () => {
-    // Perform logout logic here
+  const logout = async () => {
+    await invalidateToken();
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, update }}>
       {children}
     </AuthContext.Provider>
   );
