@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { handleInputChange } from '../../utils/inputChange';
 import LinkToButton from '../common/LinkToButton';
 import { useAuth } from '../../context/AuthContext';
-// write and import some styles for this jawn
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();

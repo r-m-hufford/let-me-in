@@ -4,8 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './context/AuthContext';
+
 const userFromLocalStorage = localStorage.getItem('user');
 const initialUser = userFromLocalStorage ? JSON.parse(userFromLocalStorage) : null;
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

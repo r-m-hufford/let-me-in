@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { deleteAccount } from "../../api/auth";
 import { handleInputChange } from "../../utils/inputChange";
 
-// create a password confirm component
 const DeleteAccount: React.FC = () => {
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate()
