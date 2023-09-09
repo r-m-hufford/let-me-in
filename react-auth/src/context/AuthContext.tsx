@@ -1,9 +1,10 @@
 import { User } from '../interfaces/user';
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { login as loginReq, whoami, invalidateToken, updateUser } from '../api/auth';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface AuthContextType {
-  user: User | null;
+  user: User | null | undefined;
   login: (form: any) => any;
   logout: () => void;
   update: (form: any) => void;
@@ -21,11 +22,16 @@ export function useAuth() {
 
 interface AuthProviderProps {
   children: ReactNode;
-  initialUser: User;
 }
 
-export function AuthProvider({ children, initialUser }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(initialUser);
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<User | null | undefined>();
+  const { setItem, getItem, removeItem } = useLocalStorage();
+
+  useEffect(() => {
+    const user = getItem('user');
+    if (user) setUser(JSON.parse(user));
+  }, [getItem]);
 
   const update = async (form: any) => {
     const response = await updateUser(form);
@@ -36,10 +42,10 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
       const response = await loginReq(form);
       
       if (response.success) {
-        window.localStorage.setItem('accessToken', response.token.accessToken);
+        setItem('accessToken', response.token.accessToken);
         const me = await whoami();
         setUser(me);
-        window.localStorage.setItem('user', JSON.stringify(me));
+        setItem('user', JSON.stringify(me));
       }
       
       return response;
@@ -54,7 +60,8 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
 
   const logout = async () => {
     await invalidateToken();
-    window.localStorage.removeItem('user');
+    removeItem('user');
+    removeItem('accessToken');
     setUser(null);
   };
 
