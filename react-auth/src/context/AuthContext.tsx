@@ -42,29 +42,30 @@ export function useAuth() {
 
 interface AuthProviderProps {
   children: ReactNode;
+  initialUser: User;
 }
 
-export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
+export function AuthProvider({ children, initialUser }: AuthProviderProps) {
+  const [user, setUser] = useState<User | null>(initialUser);
 
   const update = async (form: any) => {
     // send the form
     const response = await updateUser(form);
     // form should return an up-to-date user
-    console.log('update resp: ', response);
     // setUser with updated user
     setUser(response);
   }
   const login = async (form: any) => {
-    console.log('auth context login: ', form);
     try {
       const response = await loginReq(form);
-        if (response.success) {
-          window.localStorage.setItem('accessToken', response.token.accessToken);
+      
+      if (response.success) {
+        window.localStorage.setItem('accessToken', response.token.accessToken);
+        const me = await whoami();
+        setUser(me);
+        window.localStorage.setItem('user', JSON.stringify(me));
       }
-
-      const me = await whoami()
-      setUser(me);
+      
       return response;
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
@@ -76,6 +77,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const logout = async () => {
+    // will need to interact with localStorage here
     await invalidateToken();
     setUser(null);
   };

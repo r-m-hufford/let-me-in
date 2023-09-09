@@ -3,15 +3,15 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import SiteHeader from './components/header/Header';
 import { AuthProvider } from './context/AuthContext';
-
+const userFromLocalStorage = localStorage.getItem('user');
+const initialUser = userFromLocalStorage ? JSON.parse(userFromLocalStorage) : null;
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <AuthProvider>
+    <AuthProvider initialUser={initialUser}>
       <App />
     </AuthProvider>
   </React.StrictMode>

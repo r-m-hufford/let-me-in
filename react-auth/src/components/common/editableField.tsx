@@ -28,7 +28,6 @@ const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }
   const handleUpdate = async () => {
     setSaving(true);
     const response = await update({[name]: data});
-    // setData(response[name]);
     setSaving(false);
     setEditing(false);
   }
