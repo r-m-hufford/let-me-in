@@ -4,6 +4,7 @@ import { login as loginReq, whoami, invalidateToken, updateUser } from '../api/a
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface AuthContextType {
+  setUser: (user: User) => void;
   user: User | null | undefined;
   login: (form: any) => any;
   logout: () => void;
@@ -31,10 +32,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const user = getItem('user');
     if (user) setUser(JSON.parse(user));
-  }, [getItem]);
+  }, []);
 
   const update = async (form: any) => {
     const response = await updateUser(form);
+    setItem('user', JSON.stringify(response));
     setUser(response);
   }
   const login = async (form: any) => {
@@ -66,7 +68,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, update }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout, update }}>
       {children}
     </AuthContext.Provider>
   );
