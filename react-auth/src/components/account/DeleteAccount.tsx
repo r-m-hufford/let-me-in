@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteAccount } from "../../api/auth";
+import { deleteAccount } from "../../api/user";
 import { handleInputChange } from "../../utils/inputChange";
 import { useAuth } from "../../context/AuthContext";
 

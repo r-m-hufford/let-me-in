@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleInputChange } from "../../utils/inputChange";
-import { signup, whoami } from "../../api/auth";
+import { signup, whoami } from "../../api/user";
 import LinkToButton from "../common/LinkToButton";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useAuth } from "../../context/AuthContext";

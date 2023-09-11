@@ -1,6 +1,7 @@
 import { User } from '../interfaces/user';
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { login as loginReq, whoami, invalidateToken, updateUser } from '../api/auth';
+import { login as loginReq, invalidateToken } from '../api/auth';
+import { whoami, updateUser } from '../api/user';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface AuthContextType {
