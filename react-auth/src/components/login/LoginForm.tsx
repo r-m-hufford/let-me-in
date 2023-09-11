@@ -1,9 +1,8 @@
 import React, { ChangeEvent, useState } from 'react';
-import { login } from '../../api/auth';
 import { useNavigate } from 'react-router-dom';
 import { handleInputChange } from '../../utils/inputChange';
 import LinkToButton from '../common/LinkToButton';
-// write and import some styles for this jawn
+import { useAuth } from '../../context/AuthContext';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -11,6 +10,7 @@ const LoginForm: React.FC = () => {
     email: '',
     password: ''
   });
+  const { login } = useAuth();
   
   const [errors, setErrors] = useState<string[]>([]);
 
@@ -23,12 +23,8 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
     try {
       const response = await login(form);
-      if (response.success) {
-        window.localStorage.setItem('accessToken', response.token.accessToken);
-        navigate('/account');
-      }
+      if (response.success) navigate('/account');
     } catch (error: any) {
-      // this can get moved to the auth api eventually
       if (error.response && error.response.status === 400) {
         setErrors(['invalid email or password'])
       } else {

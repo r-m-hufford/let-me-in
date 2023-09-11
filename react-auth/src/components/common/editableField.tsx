@@ -1,6 +1,6 @@
 import React, { useState, useEffect, InputHTMLAttributes, ChangeEvent } from "react";
-import { updateUser, whoami } from "../../api/auth";
 import { handleInputChange } from "../../utils/inputChange";
+import { useAuth } from "../../context/AuthContext";
 
 interface EditableFieldProps {
   initialData: string;
@@ -9,6 +9,7 @@ interface EditableFieldProps {
 }
 
 const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }) => {
+  const { update } = useAuth();
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState<string>(initialData);
@@ -21,21 +22,16 @@ const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }
     setData(e.target.value);
   }
 
+  //here is where a useUser hook will be helpful
+  //thus user related code does not end up in the
+  //useAuth hook or context. Dont optimize to early.
   const handleUpdate = async () => {
     setSaving(true);
-    const response = await updateUser({[name]: data});
-    setData(response[name]);
+    const response = await update({[name]: data});
     setSaving(false);
     setEditing(false);
   }
-  
-  useEffect(() => {
-    const fetchUser = async () => {
-      console.log('useEffect')
-      await whoami();
-    }
-    fetchUser();
-  }, [data])
+
 
   return (
     <div>

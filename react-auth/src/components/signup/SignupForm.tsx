@@ -1,8 +1,10 @@
 import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleInputChange } from "../../utils/inputChange";
-import { signup } from "../../api/auth";
+import { signup, whoami } from "../../api/auth";
 import LinkToButton from "../common/LinkToButton";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useAuth } from "../../context/AuthContext";
 
 const SignupForm: React.FC = () => {
   const navigate = useNavigate();
@@ -14,6 +16,8 @@ const SignupForm: React.FC = () => {
     confirmPassword: undefined
   });
   const [errors, setErrors] = useState<string[]>([]);
+  const { setItem } = useLocalStorage();
+  const { setUser } = useAuth();
 
   const handleFormChange = (e: ChangeEvent<HTMLInputElement>, setData: Function) => {
     handleInputChange(e, setForm);
@@ -37,7 +41,10 @@ const SignupForm: React.FC = () => {
     try {
       const response = await signup(form);
       if (response.success) {
-        window.localStorage.setItem('accessToken', response.token.accessToken);
+        setItem('accessToken', response.token.accessToken);
+        const me = await whoami();
+        setItem('user', JSON.stringify(me));
+        setUser(me);
         navigate('/account');
       }
       if (response.error) {

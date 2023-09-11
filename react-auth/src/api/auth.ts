@@ -5,6 +5,7 @@ import { PasswordResetRequest } from '../interfaces/requests';
 interface DeleteRequest {
   password: string;
 }
+
 export const test = async () => {
   const response = await apiInstance.get('/api/test');
   return response.data;
