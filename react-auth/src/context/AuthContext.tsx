@@ -3,13 +3,14 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import { login as loginReq, invalidateToken } from '../api/auth';
 import { whoami, updateUser } from '../api/user';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { LoginRequest } from '../interfaces/requests';
 
 interface AuthContextType {
   setUser: (user: User) => void;
   user: User | null | undefined;
-  login: (form: any) => any;
+  login: (form: LoginRequest) => any;
   logout: () => void;
-  update: (form: any) => void;
+  update: (form: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,12 +36,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (user) setUser(JSON.parse(user));
   }, []);
 
-  const update = async (form: any) => {
+  const update = async (form: Partial<User>) => {
     const response = await updateUser(form);
     setItem('user', JSON.stringify(response));
     setUser(response);
   }
-  const login = async (form: any) => {
+  const login = async (form: LoginRequest) => {
     try {
       const response = await loginReq(form);
       

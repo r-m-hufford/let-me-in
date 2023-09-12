@@ -1,9 +1,6 @@
 import apiInstance from './apiConfig';
 import { User } from '../interfaces/user';
 
-interface DeleteRequest {
-  password: string;
-}
 export const signup = async (userData: Partial<User>) => {
   const response = await apiInstance.post('/api/users/signup', userData);
   return response.data;
