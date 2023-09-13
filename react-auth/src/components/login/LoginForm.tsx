@@ -23,16 +23,10 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
     try {
       const response = await login(form);
-      console.log('login form: ', response);
       if (response.success) navigate('/account');
     } catch (error: any) {
-      if (error.response && error.response.status === 400) {
-        setErrors(['invalid email or password'])
-      } else {
-        console.error('An error occurred: ', error);
-      }
+      console.error('An error occurred: ', error);
     }
-
   }
 
   return (

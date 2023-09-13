@@ -23,6 +23,15 @@ export const useError = () => {
 
 export const ErrorProvider = ({ children }: ErrorProviderProps) => {
   const [errors, setErrors] = useState<string[]>([]);
+
+  /**
+   * I can create error some logic here to account
+   * for all the different types of errors
+   * arrays.
+   * strings.
+   * errors from the server. {response.error}
+   * errors on larger axios objects. {error.response}
+   */
   return (
     <ErrorContext.Provider value={{ errors, setErrors }}>
       {children}
