@@ -4,6 +4,7 @@ import { login as loginReq, invalidateToken } from '../api/auth';
 import { whoami, updateUser } from '../api/user';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { LoginRequest } from '../interfaces/requests';
+import { useError } from './ErrorContext';
 
 interface AuthContextType {
   setUser: (user: User) => void;
@@ -30,6 +31,7 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null | undefined>();
   const { setItem, getItem, removeItem } = useLocalStorage();
+  const { errors, setErrors } = useError();
 
   useEffect(() => {
     const user = getItem('user');
@@ -44,7 +46,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const login = async (form: LoginRequest) => {
     try {
       const response = await loginReq(form);
-      
+      console.log('auth context: ', response);
+
       if (response.success) {
         setItem('accessToken', response.token.accessToken);
         const me = await whoami();
@@ -52,10 +55,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setItem('user', JSON.stringify(me));
       }
       
+      if (response.status === 400) {
+        setErrors([response.data.error]);
+      }
       return response;
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
-        console.error('username or password does not match');
+        console.error(error);
       } else {
         console.error('An error occurred: ', error);
       }

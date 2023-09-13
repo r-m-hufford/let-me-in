@@ -1,8 +1,8 @@
 import React , { ReactNode, createContext, useContext, useState } from 'react';
 import { useErrors } from '../hooks/useErrors';
 
-interface AuthContextType {
-  setErrors: (error: string) => void;
+interface ErrorContextType {
+  setErrors: (error: string[]) => void;
   errors: string[];
 }
 

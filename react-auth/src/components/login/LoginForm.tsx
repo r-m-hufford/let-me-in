@@ -3,17 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { handleInputChange } from '../../utils/inputChange';
 import LinkToButton from '../common/LinkToButton';
 import { useAuth } from '../../context/AuthContext';
+import { useError } from '../../context/ErrorContext';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
+  const { errors, setErrors } = useError();
   const [form, setForm] = useState({
     email: '',
     password: ''
   });
   const { login } = useAuth();
   
-  const [errors, setErrors] = useState<string[]>([]);
-
   const handleFormChange = (e: ChangeEvent<HTMLInputElement>, setData: Function) => {
     handleInputChange(e, setForm);
     setErrors([]);
@@ -23,6 +23,7 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
     try {
       const response = await login(form);
+      console.log('login form: ', response);
       if (response.success) navigate('/account');
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
