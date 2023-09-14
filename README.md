@@ -1,8 +1,8 @@
 # LET-ME-IN
 
-last updated: 09/13/23
+(_last updated: 09/13/23_)
 
-CURRENT PHASE: 2
+**CURRENT PHASE: 2 Build Core React App**
 
 ## Description
 
@@ -12,17 +12,24 @@ Layout and styling are low priorities in this project. Building a solid api and 
 
 ## Phases
 
-1. Build and API that supports authorization, authentication and use CRUD. Include a rough framework for roles and permissions.
+1. Node.js api [**complete**] - Build a Node.js api and a Postgers database. The api will support authorization, authentication and user CRUD. Auth flow will include JSON Web Tokens. Include a rough framework for implementing roles and permissions. Use common Node.js patterns for middleware and request validation. Write a suite of tests using Jest.
 
-2. Build a React app with login/logout, user CRUD and error handling.
+2. Build Core React App - Build a React with login, logout and user CRUD UI. Explore common React patterns for state management, component building and routing such as functional components, hooks and the Context API. Explore hooks broadly which includes writing custom hooks. Implement user friendly error handling.
 
-3. Build a Next.js app with login/logout, user CRUD and error handling.
+3. Build Core Next.js App - Build a Next.js app with login, logout and user CRUD UI. Explore Next's built-in tools and pattern to see how it improves upon react. Implement user friendly error handling.
 
-4. Build an ember app with login/logout, user CRUD and error handling.
+4. React and Next Nice-To-Haves - Implement some nice-to-have functionality that is related to authorization and authentication or user CRUD. This _might_ include....
 
-5. Implement nice-to-haves in React and Next Apps.
+- Oauth
+- Password related nice-to-haves
+  - Show/Hide password
+  - Forgot password
+  - Cannot reset password to current password
+  - timeout for n seconds after m number of wrong password attempts
+- Success messages and loading state
+- Confirmation emails
 
-6. Add some styles to the React and Next Apps.
+5. Styles - Add some basic layout and styling to the React and Next Apps. Again this project is not about frontend design. Styling will be minimal.
 
 ## Tech Stack
 
