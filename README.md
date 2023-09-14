@@ -6,9 +6,9 @@
 
 ## Description
 
-The purpose of this app is to practice building apis and become familiar with React and Next. I am folding in an Ember app, since that is the framework I use most.
+The purpose of this app is to practice building apis and become familiar with React and Next.
 
-Layout and styling are low priorities in this project. Building a solid api and exploring React and Next's toolset are high priorities.
+Layout and styling are low priorities in this project. Building a solid api and exploring React and Next's toolsets are high priorities.
 
 ## Phases
 
