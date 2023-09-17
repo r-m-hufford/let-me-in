@@ -5,6 +5,7 @@ import { getByUserCode, remove, sanitizeUserResponse, signup, update, whoami } f
 import { confirmNewPassword, hashPassword, validatePassword } from '../services/password';
 import { signupValidation, updateValidation } from '../../src/validators/user-validation';
 import { myDataSource } from '../../app-data-source';
+import { CustomError } from '../../src/middleware/customError';
 
 export const userRouter = express.Router();
 
@@ -45,13 +46,14 @@ userRouter.post("/signup", signupValidation() ,async (req: Request, res: Respons
   }
 })
 
-userRouter.put("/", updateValidation(), async (req: Request, res: Response) => {
-    const validationErrors = validationResult(req);
-  if (!validationErrors.isEmpty()) {
-    return res.json({ error: validationErrors.array() });
-  }
-  
+userRouter.put("/", updateValidation(), async (req: Request, res: Response, next) => {
   try {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+      for (let m of validationErrors.array()) console.log('mapped array in route: ' ,validationErrors.array().map((e) => e.msg));
+      throw new CustomError(400, validationErrors.array().map((e) => e.msg));
+    }
+
     await update(req.body);
 
     const user = await getByUserCode(req.body.userCode);
@@ -60,7 +62,7 @@ userRouter.put("/", updateValidation(), async (req: Request, res: Response) => {
     res.status(200).json(user);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'internal server error' });
+    next(error);
   }
 })
 

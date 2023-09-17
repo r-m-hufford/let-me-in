@@ -3,6 +3,7 @@ import cors from 'cors';
 import { routes } from './routes';
 import { myDataSource } from '../app-data-source';
 import { auth } from './middleware/auth';
+import { errorHandlerMiddleware } from './middleware/customError';
 
 myDataSource
   .initialize()
@@ -23,6 +24,7 @@ app.get('/api', (req: Request, res: Response) => {
 });
 
 routes(app);
+app.use(errorHandlerMiddleware);
 
 app.listen(process.env.PORT, () => {
   console.log(`listening on ${process.env.PORT}`)

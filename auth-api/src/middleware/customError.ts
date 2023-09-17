@@ -1,0 +1,19 @@
+class CustomError extends Error {
+  statusCode: number;
+  messages: string[];
+  constructor(statusCode, messages) {
+    super();
+    this.statusCode = statusCode;
+    this.messages = messages
+  }
+}
+
+const errorHandlerMiddleware = (err, req, res, next) => {
+  if (err instanceof CustomError) {
+    return res.status(err.statusCode).json({ error: err.messages })
+  }
+  console.error(err);
+  res.status(500).json({ error: 'Internal Server Error' });
+}
+
+export { CustomError, errorHandlerMiddleware}
