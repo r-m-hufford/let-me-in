@@ -46,6 +46,11 @@ userRouter.post("/signup", signupValidation() ,async (req: Request, res: Respons
 })
 
 userRouter.put("/", updateValidation(), async (req: Request, res: Response) => {
+    const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    return res.json({ error: validationErrors.array() });
+  }
+  
   try {
     await update(req.body);
 

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, InputHTMLAttributes, useState } from "react";
 import { handleInputChange } from "../../utils/inputChange";
 import { resetPassword } from "../../api/auth";
-import { error } from "console";
+import { useError } from "../../context/ErrorContext";
 
 const ChangePassword: React.FC = () => {
   const [form, setForm] = useState({
@@ -9,7 +9,7 @@ const ChangePassword: React.FC = () => {
     password: '',
     confirmPassword: ''
   })
-  const [errors, setErrors] = useState<string[]>([]);
+  const { errors, setErrors } = useError();
 
   const handleFormChange = (e: ChangeEvent<HTMLInputElement>) => {
     handleInputChange(e, setForm);

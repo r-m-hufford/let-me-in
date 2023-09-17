@@ -1,5 +1,4 @@
 import React , { ReactNode, createContext, useContext, useState } from 'react';
-import { useErrors } from '../hooks/useErrors';
 
 interface ErrorContextType {
   setErrors: (error: string[]) => void;
