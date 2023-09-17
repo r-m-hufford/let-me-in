@@ -6,19 +6,17 @@ import { myDataSource } from '../../app-data-source';
 import { User } from '../models/user';
 import { validatePassword } from '../services/password';
 import { getByEmail } from '../services/users';
-
-const jwt = require('jsonwebtoken');
-const userRepo = myDataSource.getRepository(User);
+import { CustomError } from '../../src/middleware/customError';
 
 export const authRouter = express.Router();
 
-authRouter.post('/login', async (req: Request, res: Response) => {
+authRouter.post('/login', async (req: Request, res: Response, next) => {
   try {
     const user = await getByEmail(req.body);
-    if (!user) return res.status(400).json({ error: 'Invalid email or password' })
+    if (!user) throw new CustomError(400, 'Invalid email or password');
     
     const validatedPassword = await validatePassword(req.body.password, user);
-    if (!validatedPassword) return res.status(400).json({ error: 'Invalid email or password' });
+    if (!validatedPassword) throw new CustomError(400, 'Invalid email or password');
  
     const token = generateTokens(user);
  
@@ -28,6 +26,6 @@ authRouter.post('/login', async (req: Request, res: Response) => {
     });
    } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'internal server error' });
+    next(error);
    }
 });
