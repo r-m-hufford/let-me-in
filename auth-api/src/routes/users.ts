@@ -50,14 +50,16 @@ userRouter.put("/", updateValidation(), async (req: Request, res: Response, next
   try {
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
-      for (let m of validationErrors.array()) console.log('mapped array in route: ' ,validationErrors.array().map((e) => e.msg));
       throw new CustomError(400, validationErrors.array().map((e) => e.msg));
     }
 
     await update(req.body);
 
+    // delete req.body.userCode;
+    req.body.userCode = 'c9b6d9f1-4ab4-4948-bda0-497d04f76a64';
     const user = await getByUserCode(req.body.userCode);
-    if (!user) return res.status(404).json({ message: 'user not found' });
+    console.log({ user })
+    if (!user) throw new CustomError(404, 'user not found');
 
     res.status(200).json(user);
   } catch (error) {
