@@ -29,7 +29,7 @@ export async function auth(req, res, next) {
     if (error instanceof TokenExpiredError) {
       try {
         const refreshToken = req.header('x-auth-refreshToken');
-        if (!refreshToken) throw new CustomError(401, 'unauthorized'); //res.status(401).json({ error: 'Unauthorized' });
+        if (!refreshToken) throw new CustomError(401, 'unauthorized');
         // verify the refresh token
         if (!verifyToken(refreshToken)) throw new CustomError(401, 'unauthorized');
         const refreshData = decodeToken(refreshToken);
