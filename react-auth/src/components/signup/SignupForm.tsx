@@ -48,7 +48,7 @@ const SignupForm: React.FC = () => {
         setUser(me);
         navigate('/account');
       }
-      if (response.data.error) setErrors(response.data.error);
+      if (response.data && response.data.error) setErrors(response.data.error);
     } catch (error) {
       console.error(error);
     }

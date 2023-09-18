@@ -20,7 +20,7 @@ const ChangePassword: React.FC = () => {
     try {
       const response = await resetPassword(form);
       console.log({ response });
-      if (response.data.error) setErrors(response.data.error);
+      if (response.data && response.data.error) setErrors(response.data.error);
     } catch (error: any) {
       console.error(error);
     }

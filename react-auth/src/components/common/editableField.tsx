@@ -15,7 +15,7 @@ const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState<string>(initialData);
   const { errors, setErrors } = useErrors();
-  const { setItem } = useLocalStorage();
+  const { setItem, getItem } = useLocalStorage();
 
   const toggleEditState = () => {
     setEditing(!editing);
@@ -23,6 +23,7 @@ const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setData(e.target.value);
+    setErrors([]);
   }
 
   const handleUpdate = async () => {
@@ -32,7 +33,10 @@ const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }
       // if response success set item user
       if (response.success) setItem('user', JSON.stringify(response.user));
       // if response error set errors
-      if (response.data && response.data.error) setErrors(response.data.error);
+      if (response.data && response.data.error){
+        setErrors(response.data.error);
+        setData(initialData);
+      } 
       setSaving(false);
       setEditing(false);
     } catch (error) {
@@ -45,7 +49,7 @@ const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }
     <div>
       { editing ? 
       <>
-        <input type={type} name={name} id={name} placeholder={data} onChange={handleInputChange}/>
+        <input type={type} name={name} id={name} placeholder={initialData} onChange={handleInputChange}/>
         <button type="button" onClick={handleUpdate}>{saving ? 'Saving...' : 'save'}</button>
         <button type="button" onClick={toggleEditState}>cancel</button>
       </>

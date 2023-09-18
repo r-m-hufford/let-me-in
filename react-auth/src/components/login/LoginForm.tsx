@@ -24,7 +24,7 @@ const LoginForm: React.FC = () => {
     try {
       const response = await login(form);
       if (response.success) navigate('/account');
-      if (response.data.error) setErrors(response.data.error)
+      if (response.data && response.data.error) setErrors(response.data.error)
     } catch (error: any) {
       console.error(error);
     }
