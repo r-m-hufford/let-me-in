@@ -1,6 +1,8 @@
 import React, { useState, useEffect, InputHTMLAttributes, ChangeEvent } from "react";
 import { handleInputChange } from "../../utils/inputChange";
-import { useAuth } from "../../context/AuthContext";
+import { useErrors } from "../../hooks/useErrors";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { updateUser } from "../../api/user";
 
 interface EditableFieldProps {
   initialData: string;
@@ -9,10 +11,11 @@ interface EditableFieldProps {
 }
 
 const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }) => {
-  const { update } = useAuth();
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState<string>(initialData);
+  const { errors, setErrors } = useErrors();
+  const { setItem } = useLocalStorage();
 
   const toggleEditState = () => {
     setEditing(!editing);
@@ -22,14 +25,19 @@ const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }
     setData(e.target.value);
   }
 
-  //here is where a useUser hook will be helpful
-  //thus user related code does not end up in the
-  //useAuth hook or context. Dont optimize to early.
   const handleUpdate = async () => {
-    setSaving(true);
-    const response = await update({[name]: data});
-    setSaving(false);
-    setEditing(false);
+    try {
+      setSaving(true);
+      const response = await updateUser({[name]: data.trim()});
+      // if response success set item user
+      if (response.success) setItem('user', JSON.stringify(response.user));
+      // if response error set errors
+      if (response.data && response.data.error) setErrors(response.data.error);
+      setSaving(false);
+      setEditing(false);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
 
@@ -44,6 +52,7 @@ const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }
       :
       <p>{data} <button type="button" onClick={toggleEditState}>edit</button></p> 
       }
+      { errors }
     </div>
   )
 }

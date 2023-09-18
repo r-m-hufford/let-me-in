@@ -51,7 +51,10 @@ userRouter.put("/", updateValidation(), async (req: Request, res: Response, next
     const user = await getByUserCode(req.body.userCode);
     if (!user) throw new CustomError(404, 'user not found');
 
-    res.status(200).json(user);
+    res.status(200).json({
+      success: true,
+      user
+    });
   } catch (error) {
     next(error);
   }

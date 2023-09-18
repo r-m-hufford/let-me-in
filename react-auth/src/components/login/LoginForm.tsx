@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { handleInputChange } from '../../utils/inputChange';
 import LinkToButton from '../common/LinkToButton';
 import { useAuth } from '../../context/AuthContext';
-import { useError } from '../../context/ErrorContext';
+import { useErrors } from '../../hooks/useErrors';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
-  const { errors, setErrors } = useError();
+  const { errors, setErrors } = useErrors();
   const [form, setForm] = useState({
     email: '',
     password: ''
@@ -24,8 +24,9 @@ const LoginForm: React.FC = () => {
     try {
       const response = await login(form);
       if (response.success) navigate('/account');
+      if (response.data.error) setErrors(response.data.error)
     } catch (error: any) {
-      console.error('An error occurred: ', error);
+      console.error(error);
     }
   }
 
