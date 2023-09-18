@@ -46,25 +46,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const login = async (form: LoginRequest) => {
     try {
       const response = await loginReq(form);
-      console.log('auth context: ', response);
 
       if (response.success) {
         setItem('accessToken', response.token.accessToken);
         const me = await whoami();
         setUser(me);
         setItem('user', JSON.stringify(me));
-      }
-      
-      if (response.status === 400) {
-        setErrors([response.data.error]);
+      } else {
+        setErrors(response.data.error);
       }
       return response;
     } catch (error: any) {
-      if (error.response && error.response.status === 400) {
-        console.error(error);
-      } else {
-        console.error('An error occurred: ', error);
-      }
+      console.error(error);
     }
   };
 
