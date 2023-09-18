@@ -1,5 +1,4 @@
 import React, { useState, useEffect, InputHTMLAttributes, ChangeEvent } from "react";
-import { handleInputChange } from "../../utils/inputChange";
 import { useErrors } from "../../hooks/useErrors";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { updateUser } from "../../api/user";
@@ -15,7 +14,7 @@ const EditableField: React.FC<EditableFieldProps> = ({ initialData, type, name }
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState<string>(initialData);
   const { errors, setErrors } = useErrors();
-  const { setItem, getItem } = useLocalStorage();
+  const { setItem } = useLocalStorage();
 
   const toggleEditState = () => {
     setEditing(!editing);

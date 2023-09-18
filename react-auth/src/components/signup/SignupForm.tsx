@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { handleInputChange } from "../../utils/inputChange";
+import { handleFormChange } from "../../utils/formChange";
 import { signup, whoami } from "../../api/user";
 import LinkToButton from "../common/LinkToButton";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
@@ -19,11 +19,6 @@ const SignupForm: React.FC = () => {
   const { setItem } = useLocalStorage();
   const { setUser } = useAuth();
   const { errors, setErrors } = useErrors();
-
-  const handleFormChange = (e: ChangeEvent<HTMLInputElement>, setData: Function) => {
-    handleInputChange(e, setForm);
-    setErrors([]);
-  }
 
   const resetForm = () => {
     setForm((prevData) => ({
@@ -66,7 +61,7 @@ const SignupForm: React.FC = () => {
             name='firstName'
             id='firstName'
             value={form.firstName}
-            onChange={(e) => handleFormChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm, setErrors)}
           />
           <label htmlFor='lastName'>lastName</label>
           <input
@@ -74,7 +69,7 @@ const SignupForm: React.FC = () => {
             name='lastName'
             id='lastName'
             value={form.lastName}
-            onChange={(e) => handleFormChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm, setErrors)}
           />
           <label htmlFor='email'>Email</label>
           <input
@@ -82,7 +77,7 @@ const SignupForm: React.FC = () => {
             name='email'
             id='email'
             value={form.email}
-            onChange={(e) => handleFormChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm, setErrors)}
           />
           <label htmlFor='password'>password</label>
           <input
@@ -90,7 +85,7 @@ const SignupForm: React.FC = () => {
             name='password'
             id='password'
             value={form.password}
-            onChange={(e) => handleFormChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm, setErrors)}
           />
           <label htmlFor='confirmPassword'>confirmPassword</label>
           <input
@@ -98,7 +93,7 @@ const SignupForm: React.FC = () => {
             name='confirmPassword'
             id='confirmPassword'
             value={form.confirmPassword}
-            onChange={(e) => handleFormChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm, setErrors)}
           />
           <button type="submit">sign up</button>
         </form>

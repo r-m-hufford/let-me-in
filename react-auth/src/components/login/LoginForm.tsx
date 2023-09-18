@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { handleInputChange } from '../../utils/inputChange';
+import { handleFormChange } from '../../utils/formChange';
 import LinkToButton from '../common/LinkToButton';
 import { useAuth } from '../../context/AuthContext';
 import { useErrors } from '../../hooks/useErrors';
@@ -13,11 +13,6 @@ const LoginForm: React.FC = () => {
     password: ''
   });
   const { login } = useAuth();
-  
-  const handleFormChange = (e: ChangeEvent<HTMLInputElement>, setData: Function) => {
-    handleInputChange(e, setForm);
-    setErrors([]);
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +36,7 @@ const LoginForm: React.FC = () => {
             name='email'
             id='email'
             value={form.email}
-            onChange={(e) => handleFormChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm, setErrors)}
           />
           <label htmlFor='password'>Password:</label>
           <input
@@ -49,7 +44,7 @@ const LoginForm: React.FC = () => {
             name='password'
             id='password'
             value={form.password}
-            onChange={(e) => handleFormChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm, setErrors)}
           />
           {errors && <p>{errors}</p>}
           <button type="submit">Login</button>
