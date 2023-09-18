@@ -3,3 +3,8 @@ export interface PasswordResetRequest {
   password: string;
   confirmPassword: string;
 }
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}

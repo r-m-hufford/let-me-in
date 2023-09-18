@@ -1,11 +1,9 @@
-import React, { ChangeEvent, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteAccount } from "../../api/auth";
-import { handleInputChange } from "../../utils/inputChange";
+import { deleteAccount } from "../../api/user";
 import { useAuth } from "../../context/AuthContext";
 
 const DeleteAccount: React.FC = () => {
-  const [errors, setErrors] = useState([]);
   const { logout } = useAuth();
   const navigate = useNavigate()
 
@@ -17,15 +15,14 @@ const DeleteAccount: React.FC = () => {
       navigate('/');
     } catch (error: any) {
       if (error.response) {
-        setErrors(error.response.data.error);
+        console.error(error);
       }
     }
   }
 
   return (
     <div>
-        <button type="submit" onClick={handleAccountDelete}>delete account</button>
-      {errors}
+      <button type="submit" onClick={handleAccountDelete}>delete account</button>
     </div>
   )
 }

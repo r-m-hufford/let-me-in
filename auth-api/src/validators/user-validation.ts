@@ -10,7 +10,7 @@ export function signupValidation() {
     },
     email: { 
       notEmpty: { errorMessage: 'email must not be empty' },
-      isEmail: { errorMessage: 'must be valid emial' }
+      isEmail: { errorMessage: 'must be valid email' }
     },
     password: { 
       notEmpty: { errorMessage: 'password must not be empty' } 
@@ -34,7 +34,7 @@ export function updateValidation() {
     email: { 
       optional: true, 
       notEmpty: { errorMessage: 'email must not be empty' },
-      isEmail: { errorMessage: 'must be valid emial' }
+      isEmail: { errorMessage: 'must be valid email' }
     },
     password: { 
       optional: true, 

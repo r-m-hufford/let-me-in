@@ -1,37 +1,28 @@
 import React, { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { handleInputChange } from '../../utils/inputChange';
+import { handleFormChange } from '../../utils/formChange';
 import LinkToButton from '../common/LinkToButton';
 import { useAuth } from '../../context/AuthContext';
+import { useErrors } from '../../hooks/useErrors';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
+  const { errors, setErrors } = useErrors();
   const [form, setForm] = useState({
     email: '',
     password: ''
   });
   const { login } = useAuth();
-  
-  const [errors, setErrors] = useState<string[]>([]);
-
-  const handleFormChange = (e: ChangeEvent<HTMLInputElement>, setData: Function) => {
-    handleInputChange(e, setForm);
-    setErrors([]);
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await login(form);
       if (response.success) navigate('/account');
+      if (response.data && response.data.error) setErrors(response.data.error)
     } catch (error: any) {
-      if (error.response && error.response.status === 400) {
-        setErrors(['invalid email or password'])
-      } else {
-        console.error('An error occurred: ', error);
-      }
+      console.error(error);
     }
-
   }
 
   return (
@@ -45,7 +36,7 @@ const LoginForm: React.FC = () => {
             name='email'
             id='email'
             value={form.email}
-            onChange={(e) => handleFormChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm, setErrors)}
           />
           <label htmlFor='password'>Password:</label>
           <input
@@ -53,7 +44,7 @@ const LoginForm: React.FC = () => {
             name='password'
             id='password'
             value={form.password}
-            onChange={(e) => handleFormChange(e, setForm)}
+            onChange={(e) => handleFormChange(e, setForm, setErrors)}
           />
           {errors && <p>{errors}</p>}
           <button type="submit">Login</button>

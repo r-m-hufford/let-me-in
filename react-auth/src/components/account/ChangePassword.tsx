@@ -1,7 +1,7 @@
 import React, { ChangeEvent, InputHTMLAttributes, useState } from "react";
-import { handleInputChange } from "../../utils/inputChange";
+import { handleFormChange } from "../../utils/formChange";
 import { resetPassword } from "../../api/auth";
-import { error } from "console";
+import { useErrors } from "../../hooks/useErrors";
 
 const ChangePassword: React.FC = () => {
   const [form, setForm] = useState({
@@ -9,33 +9,15 @@ const ChangePassword: React.FC = () => {
     password: '',
     confirmPassword: ''
   })
-  const [errors, setErrors] = useState<string[]>([]);
+  const { errors, setErrors } = useErrors();
 
-  const handleFormChange = (e: ChangeEvent<HTMLInputElement>) => {
-    handleInputChange(e, setForm);
-    setErrors([]);
-  }
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await resetPassword(form);
-      if (response.error) {
-        const newErrors = [];
-        for (let i = 0; i < response.error.length; i++) {
-          const message = response.error[i].msg;
-          newErrors.push(message);
-        }
-        setErrors(newErrors);
-      }
+      console.log({ response });
+      if (response.data && response.data.error) setErrors(response.data.error);
     } catch (error: any) {
-      if (error.response) {
-        setErrors(error.response.data.error);
-        setForm({
-          currentPassword: '',
-          password: '',
-          confirmPassword: ''
-        });
-      }
       console.error(error);
     }
   }
@@ -44,15 +26,15 @@ const ChangePassword: React.FC = () => {
     <div>
       <form onSubmit={handlePasswordChange}>
         <label htmlFor="currentPassword">current password</label>
-        <input type="password" name="currentPassword" id="currentPassword" onChange={e  => {handleFormChange(e)}}/>
+        <input type="password" name="currentPassword" id="currentPassword" onChange={e  => {handleFormChange(e, setForm, setErrors)}}/>
         <br />
         <br />
         <label htmlFor="password">new password</label>
-        <input type="password" name="password" id="password" onChange={e  => {handleFormChange(e)}}/>
+        <input type="password" name="password" id="password" onChange={e  => {handleFormChange(e, setForm, setErrors)}}/>
         <br />
         <br />
         <label htmlFor="confirmPassword">confirm new password</label>
-        <input type="password" name="confirmPassword" id="confirmPassword" onChange={e  => {handleFormChange(e)}}/>
+        <input type="password" name="confirmPassword" id="confirmPassword" onChange={e  => {handleFormChange(e, setForm, setErrors)}}/>
         <br />
         <button type="submit">change password</button>
       </form>
