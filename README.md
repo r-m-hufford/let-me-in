@@ -1,8 +1,8 @@
 # LET-ME-IN
 
-(_last updated: 09/13/23_)
+(_last updated: 09/18/23_)
 
-**CURRENT PHASE: 2 Build Core React App**
+**CURRENT PHASE: 3 Build Core Next.js App**
 
 ## Description
 
@@ -14,7 +14,7 @@ Layout and styling are low priorities in this project. Building a solid api and 
 
 1. Node.js api [**complete**] - Build a Node.js api and a Postgres database. The api will support authorization, authentication and user CRUD. Auth flow will include JSON Web Tokens. Include a rough framework for implementing roles and permissions. Use common Node.js patterns for middleware and request validation. Write a suite of tests using Jest.
 
-2. Build Core React App - Build a React with login, logout and user CRUD UI. Explore common React patterns for state management, component building and routing such as functional components, hooks and the Context API. Explore built-in hooks and write custom hooks. Implement user friendly error handling.
+2. Build Core React App [**complete**] - Build a React with login, logout and user CRUD UI. Explore common React patterns for state management, component building and routing such as functional components, hooks and the Context API. Explore built-in hooks and write custom hooks. Implement user friendly error handling.
 
 3. Build Core Next.js App - Build a Next.js app with login, logout and user CRUD UI. Explore Next's built-in tools and pattern to see how it improves upon react. Implement user friendly error handling.
 
