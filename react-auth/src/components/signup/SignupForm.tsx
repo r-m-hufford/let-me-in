@@ -99,7 +99,9 @@ const SignupForm: React.FC = () => {
         </form>
       </div>
       <div>
-        {errors && <p>{errors}</p>}
+        {errors.map((error, index) => (
+          <p key={index}>{error}</p>
+        ))}
       </div>
       <div>
         <h2>Already a member?</h2>
