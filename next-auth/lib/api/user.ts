@@ -18,6 +18,10 @@ export const whoami =async () => {
 export const signup = async (userData: Partial<User>) => {
   try {
     const response = await fetch('/api/users/signup', {
+      method: 'POST',
+      headers: {
+        'x-auth-token': //need to store the token in local storage
+      },
       body: JSON.stringify(userData)
     });
     const data = await response.json();
@@ -30,7 +34,12 @@ export const signup = async (userData: Partial<User>) => {
 
 export const updateUser = async (userData: Partial<User>) => {
   try {
-    const response = await fetch(`api/users`, userData)
+    const response = await fetch(`api/users`, {
+      headers: {
+        'x-auth-token': //need to store the token in local storage
+      },
+      body: JSON.stringify(userData)
+    })
     const data = await response.json();
     
     return data
