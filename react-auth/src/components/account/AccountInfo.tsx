@@ -1,6 +1,6 @@
 import React from "react";
 import { parseDate } from "../../utils/parseDate";
-import EditableField from "../common/EditableField";
+import EditableField from '../common/EditableField';
 import ChangePassword from "./ChangePassword";
 import DeleteAccount from "./DeleteAccount";
 import { useAuth } from "../../context/AuthContext";
