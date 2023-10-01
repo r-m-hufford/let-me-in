@@ -24,17 +24,9 @@ const LoginForm: React.FC = () => {
 
   return (
     <div>
-      <h2>This was the login form but now its just a heading</h2>
-      <h2>This is your email:</h2>
-      <p>{session?.user?.email}</p>
-      <br />
-      <br />
-      <br />
       <button type='button' onClick={() => signIn('github')}>Login with github</button>
       <br />
-      <br />
-      <br />
-      <p>Login with credentials</p>
+      <p>Login</p>
       <form>
         <label htmlFor="username">username</label>
         <input type="text" name='username' onChange={(e) => setUsername(e.target.value)}/>
@@ -44,6 +36,12 @@ const LoginForm: React.FC = () => {
         <br />
         <button type='submit' onClick={handleSubmit}>login</button>
       </form>
+      <br />
+      <br />
+      <br />
+      <h2>User Data:</h2>
+      <p>{session?.user?.email}</p>
+      <p>{session?.user?.name}</p>
       <br />
       <br />
       <br />
