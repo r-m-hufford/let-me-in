@@ -1,13 +1,18 @@
 import { User } from "../../interfaces/user";
 
-export const whoami =async () => {
+export const whoami = async () => {
   try {
+    const token = window.localStorage.getItem('token');
+    console.log('token from local storage: ');
+    console.log('token from local storage: ', token);
+
     const response = await fetch('http://localhost:4000/api/users/whoami', {
       headers: {
-        'x-auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphY2tpZUBleGFtcGxlLmNvbSIsInVzZXJDb2RlIjoiZTZkNzFlMDUtZWRlMS00OGU1LThlZGYtODE1NjcxZWRkYzJmIiwidHlwZSI6IkFDQ0VTUyIsImlhdCI6MTY5NTYwODMxMiwiZXhwIjoxNjk1Njk0NzEyfQ.8SplFcTQ_me4VybsoU5djE-7GFhI8-vqF0-6WW2a8xA'
+        'Content-Type': 'application/json',
+        'x-auth-token': token
       }
     });
-
+    
     const data = await response.json();
     return data;
   } catch (error: any) {
@@ -19,9 +24,6 @@ export const signup = async (userData: Partial<User>) => {
   try {
     const response = await fetch('/api/users/signup', {
       method: 'POST',
-      headers: {
-        'x-auth-token': //need to store the token in local storage
-      },
       body: JSON.stringify(userData)
     });
     const data = await response.json();
@@ -34,9 +36,11 @@ export const signup = async (userData: Partial<User>) => {
 
 export const updateUser = async (userData: Partial<User>) => {
   try {
+    const token = window.localStorage.getItem('token');
     const response = await fetch(`api/users`, {
       headers: {
-        'x-auth-token': //need to store the token in local storage
+        'Content-Type': 'application/json',
+        'x-auth-token': token
       },
       body: JSON.stringify(userData)
     })
@@ -50,7 +54,13 @@ export const updateUser = async (userData: Partial<User>) => {
 
 export const deleteAccount = async () => {
   try {
-    const response = await fetch('api/users');
+    const token = window.localStorage.getItem('token');
+    const response = await fetch('api/users', {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': token
+      }
+    });
     const data = await response.json();
     
     return data;

@@ -1,31 +1,28 @@
-'use client'
 import Image from 'next/image'
 import LoginForm from './components/LoginForm'
 import Link from 'next/link'
-import { login, whoami } from '../lib/api/auth'
 
-export default function Home() {
-  const handleLogin = async () => {
-    const response = await login({
-        email: 'jackie@example.com',
-        password: 'password'
-      });
+import { options } from './options'
+import { getServerSession } from 'next-auth'
 
-    console.log('response: ', response);
-  }
+export default async function Home() {
+  const session = await getServerSession(options);
 
-  const handleWhoami = async () => {
-    const response = await whoami();
-    console.log('response: ', response);
-  }
   return (
     <main>
       <h1 className='text-amber-500'>let-me-in</h1>
+      <br />
+      <br />
+      {session ? <p>you have a session</p> : <p> no sessions here</p>}
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       < LoginForm />
-      <p>don't have an account</p>
+      <br />
+      <br />
       <Link href='/signup'> signup </Link>
-      <button onClick={handleLogin}>CLICK ME!</button>
-      <button onClick={handleWhoami}>WHOAMI ME!</button>
     </main>
   )
 }
